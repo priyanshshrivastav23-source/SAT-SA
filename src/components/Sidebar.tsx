@@ -11,7 +11,6 @@ import {
   History,
   ChevronLeft,
   ChevronRight,
-  ShieldAlert,
   Scale
 } from 'lucide-react';
 
@@ -21,7 +20,6 @@ interface SidebarProps {
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
   pendingReviewsCount: number;
-  totalFindingsCount: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -29,8 +27,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setActiveTab,
   isCollapsed,
   setIsCollapsed,
-  pendingReviewsCount,
-  totalFindingsCount
+  pendingReviewsCount
 }) => {
   const navItems = [
     {
@@ -43,19 +40,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'cses',
       name: 'CSE Assessments',
       icon: Building2,
-      badge: '7 Entities'
+      badge: null
     },
     {
       id: 'findings',
       name: 'Findings',
       icon: AlertTriangle,
-      badge: pendingReviewsCount > 0 ? `${pendingReviewsCount} Pending` : `${totalFindingsCount}`
+      badge: pendingReviewsCount > 0 ? `${pendingReviewsCount} Pending` : null
     },
     {
       id: 'gaps',
       name: 'Execution Gaps',
       icon: GitFork,
-      badge: '6 Categories'
+      badge: null
     },
     {
       id: 'alerts',
@@ -67,7 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'investigations',
       name: 'Investigation Analysis',
       icon: SearchCode,
-      badge: '4 Cases'
+      badge: null
     },
     {
       id: 'evidence',
@@ -154,21 +151,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
       </div>
 
-      {/* Human In The Loop Regulatory Notice at Bottom */}
+      {/* System Operational Status Footer */}
       <div className="p-3 border-t border-[#E4E4E7]">
         {!isCollapsed ? (
-          <div className="bg-[#F4F4F5] rounded-xl p-3 border border-[#E4E4E7] text-[11px] text-[#71717A] leading-relaxed">
-            <div className="flex items-center space-x-1.5 text-[#059669] font-semibold mb-1">
-              <ShieldAlert className="w-3.5 h-3.5 text-[#059669]" />
-              <span>Human-in-the-Loop</span>
+          <div className="flex items-center justify-between text-xs text-[#71717A] px-2 py-1 bg-[#FAFAFA] rounded-xl border border-[#E4E4E7]">
+            <div className="flex items-center space-x-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="font-medium text-[#27272A] text-[11px]">SOC Telemetry Active</span>
             </div>
-            <p className="text-[#71717A] text-[11px]">
-              SAT-SA surfaces execution-gap signals. The NCIIPC supervisor evaluates underlying evidence and records official determinations.
-            </p>
+            <span className="font-mono text-[10px] text-[#71717A]">SEC-70A</span>
           </div>
         ) : (
-          <div className="flex justify-center" title="Human-in-the-loop Statutory Mandate">
-            <ShieldAlert className="w-5 h-5 text-[#059669]" />
+          <div className="flex justify-center" title="SOC Telemetry Active">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
           </div>
         )}
       </div>

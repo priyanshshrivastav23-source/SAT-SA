@@ -37,18 +37,18 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center space-x-2">
-              <span className="px-2.5 py-0.5 rounded-md bg-orange-50 text-[#EA580C] border border-orange-200 text-xs font-bold font-mono">
+              <span className="px-2.5 py-0.5 rounded-md bg-amber-50 text-[#D97706] border border-amber-200 text-xs font-bold font-mono">
                 {pendingCount} SIGNALS PENDING REVIEW
               </span>
-              <span className="text-xs text-[#4F46E5] font-mono font-semibold">
-                NATIONAL CYBER SECURITY SITUATION ROOM
+              <span className="text-xs text-[#71717A] font-mono font-medium">
+                NCIIPC CYBER SUPERVISORY DESK
               </span>
             </div>
             <h1 className="text-xl md:text-2xl font-bold text-[#09090B]">
-              Supervisory Oversight & SOC Execution-Gap Surveillance
+              SOC Operational Oversight & Telemetry Surveillance
             </h1>
             <p className="text-xs md:text-sm text-[#71717A] max-w-3xl leading-relaxed">
-              Monitoring telemetry fidelity, alert triage stagnation, and operational integrity across designated Critical Sector Entities (CSEs) pursuant to Section 70A of the Information Technology Act.
+              Continuous monitoring of alert triage integrity, telemetry continuity, and operational compliance across designated Critical Sector Entities (CSEs).
             </p>
           </div>
           <div className="flex items-center space-x-3 shrink-0">
@@ -103,7 +103,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
             <span className="text-xs text-[#EA580C] font-semibold">({criticalCount} High Severity)</span>
           </div>
           <div className="mt-3 text-[11px] text-[#71717A] flex items-center justify-between border-t border-[#E4E4E7] pt-2.5">
-            <span>Pending Human Determination:</span>
+            <span>Pending Supervisory Review:</span>
             <span className="font-bold text-[#D97706] font-mono">{pendingCount} signals</span>
           </div>
         </div>
@@ -280,10 +280,10 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
           <div className="flex items-center space-x-2">
             <ShieldAlert className="w-4 h-4 text-[#4F46E5]" />
             <h2 className="text-sm font-bold text-[#09090B]">
-              Prioritized System Execution-Gap Observations
+              Prioritized Execution-Gap Observations
             </h2>
             <span className="text-xs text-[#71717A] hidden sm:inline">
-              (Requires Human Supervisory Determination)
+              (Pending Review)
             </span>
           </div>
           <button

@@ -1,49 +1,48 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        charcoal: {
-          950: '#09090B', // High-contrast dark charcoal
-          900: '#18181B',
-          800: '#27272A', // Secondary dark charcoal
-          700: '#3F3F46',
-          600: '#52525B',
-          500: '#71717A', // Subtle muted text
-          400: '#A1A1AA',
-          300: '#D4D4D8',
-          200: '#E4E4E7', // Flat 1px light grey border
-          100: '#F4F4F5', // Very light neutral grey panel
-          50: '#FAFAFA',  // Panel light background
+        warm: {
+          50: '#FAFAF9',
+          100: '#F5F5F4',
+          200: '#E7E5E4',
+          300: '#D6D3D1',
+          400: '#A8A29E',
+          500: '#78716C',
+          600: '#57534E',
+          700: '#44403C',
+          800: '#292524',
+          900: '#1C1917',
+          950: '#0C0A09',
         },
-        brand: {
-          indigo: '#4F46E5',  // Crisp Indigo
-          slate: '#0F172A',   // Deep Slate
-          orange: '#EA580C',  // Orange for gaps
-          emerald: '#059669', // Emerald Green for resolved items
-          amber: '#D97706',   // Amber for warnings/charts
-          border: '#E4E4E7',  // Flat 1px light grey border
-          bg: '#FFFFFF',      // Pure white
-          panel: '#F4F4F5',   // Light neutral grey panel
-          subpanel: '#FAFAFA',
-          text: '#09090B',    // Dark charcoal
-          muted: '#71717A',   // Subtle muted
+        sage: {
+          50: '#F4F7F5',
+          100: '#E3ECE6',
+          200: '#C7D9CE',
+          300: '#A3BFB0',
+          400: '#7FA392',
+          500: '#52796F',
+          600: '#3D5E56',
+          700: '#2F4842',
         },
-        gov: {
-          dark: '#0F172A',
-          card: '#FFFFFF',
-          panel: '#F4F4F5',
-          border: '#E4E4E7',
-          indigo: '#4F46E5',
-          emerald: '#059669',
-          orange: '#EA580C',
-          amber: '#D97706',
-          text: '#09090B',
-          muted: '#71717A',
+        // Muted purple / plum
+        plum: {
+          50: '#FAF5FF',
+          100: '#F3E8FF',
+          200: '#E9D5FF',
+          300: '#D8B4FE',
+          400: '#C084FC',
+          500: '#A855F7',
+          600: '#9333EA',
+          700: '#7E22CE',
+          800: '#6B21A8',
+          900: '#581C87',
         }
       },
       fontFamily: {

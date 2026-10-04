@@ -129,8 +129,8 @@ export const AssessmentReportsTab: React.FC<AssessmentReportsTabProps> = ({
 
           <div className="text-right text-xs font-mono text-[#71717A] shrink-0">
             <div><strong className="text-[#09090B]">Report Ref:</strong> NCIIPC/SAT-SA/2026/Q3-09</div>
-            <div><strong className="text-[#09090B]">Date of Issue:</strong> {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
-            <div className="text-[#EA580C] font-bold">RESTRICTED (SEC-70A)</div>
+            <div><strong className="text-[#09090B]">Date of Issue:</strong> 04 Oct 2026</div>
+            <div className="text-[#27272A] font-semibold text-[11px]">OFFICIAL USE ONLY</div>
           </div>
         </div>
 

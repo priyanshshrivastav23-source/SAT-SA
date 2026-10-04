@@ -1,5 +1,4 @@
-import React from 'react';
-import { Shield, Search, UserCheck, Bell, Award } from 'lucide-react';
+import { Shield, Search, UserCheck, Bell } from 'lucide-react';
 import { FilterState } from '../types';
 
 interface HeaderProps {
@@ -28,10 +27,10 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
         <div className="flex items-center space-x-4 text-[#27272A]">
           <span className="flex items-center space-x-1.5">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#059669] animate-pulse"></span>
-            <span className="text-[#059669] font-medium">SEC-70A IT ACT STATUTORY OVERSIGHT</span>
+            <span className="inline-block w-2 h-2 rounded-full bg-[#059669]"></span>
+            <span className="text-[#059669] font-medium">Statutory Oversight Active</span>
           </span>
-          <span className="hidden lg:inline text-[#EA580C] font-semibold">HUMAN-IN-THE-LOOP MANDATE ACTIVE</span>
+          <span className="hidden lg:inline text-[#71717A] text-[11px]">SEC-70A IT ACT</span>
         </div>
       </div>
 
@@ -39,17 +38,17 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="px-6 py-3.5 flex items-center justify-between gap-4">
         {/* Brand / Logo */}
         <div className="flex items-center space-x-3 cursor-pointer" onClick={() => onNavigateTab('overview')}>
-          <div className="w-10 h-10 rounded-xl bg-[#F4F4F5] border border-[#E4E4E7] flex items-center justify-center">
-            <Shield className="w-5 h-5 text-[#4F46E5]" />
+          <div className="w-10 h-10 rounded-xl bg-white border border-emerald-300/80 shadow-xs flex items-center justify-center ring-2 ring-emerald-500/10">
+            <Shield className="w-5 h-5 text-emerald-600 fill-emerald-50" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-bold text-lg text-[#09090B] tracking-tight">SAT-SA</span>
-              <span className="px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded-md bg-indigo-50 text-[#4F46E5] border border-indigo-200">
-                v2.6 SIH26157
+              <span className="font-bold text-lg text-warm-900 tracking-tight font-serif">SAT-SA</span>
+              <span className="px-2 py-0.5 text-[9px] uppercase font-bold tracking-wider rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200/80">
+                Supervisory Core
               </span>
             </div>
-            <p className="text-xs text-[#71717A] font-medium">
+            <p className="text-xs text-warm-500 font-medium">
               Supervisory Analytics Tool for SOC Assessment
             </p>
           </div>
@@ -99,9 +98,8 @@ export const Header: React.FC<HeaderProps> = ({
               <UserCheck className="w-4 h-4 text-[#059669]" />
             </div>
             <div className="hidden md:block text-left text-xs">
-              <div className="font-semibold text-[#09090B] flex items-center space-x-1">
-                <span>R. Rao, Dy. Director</span>
-                <Award className="w-3 h-3 text-[#D97706] inline" />
+              <div className="font-semibold text-[#09090B]">
+                R. Rao, Dy. Director
               </div>
               <div className="text-[11px] text-[#71717A]">
                 NCIIPC Supervisory Desk (ID: 409)
