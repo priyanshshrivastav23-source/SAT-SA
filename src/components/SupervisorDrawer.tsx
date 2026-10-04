@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X, CheckCircle2, AlertOctagon, HelpCircle, FileText, Hash, ShieldCheck, Clock, Building, Scale, ArrowRight } from 'lucide-react';
 import { Finding, EvidenceItem, AssessmentStatus } from '../types';
 
@@ -15,29 +15,32 @@ interface SupervisorDrawerProps {
   ) => void;
 }
 
-export const SupervisorDrawer: React.FC<SupervisorDrawerProps> = ({
+interface DrawerContentProps {
+  finding: Finding;
+  onClose: () => void;
+  evidenceItems: EvidenceItem[];
+  onSaveAssessment: (
+    findingId: string,
+    status: AssessmentStatus,
+    remarks: string,
+    reviewer: string
+  ) => void;
+}
+
+const SupervisorDrawerContent: React.FC<DrawerContentProps> = ({
   finding,
-  isOpen,
   onClose,
   evidenceItems,
   onSaveAssessment
 }) => {
-  const [selectedStatus, setSelectedStatus] = useState<AssessmentStatus>('Confirmed Concern');
-  const [remarks, setRemarks] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<AssessmentStatus>(
+    finding.status === 'Pending Review' ? 'Confirmed Concern' : finding.status
+  );
+  const [remarks, setRemarks] = useState(finding.supervisorRemarks || '');
   const [reviewerName, setReviewerName] = useState('Shri Rajeshwar Rao (Dy. Director, NCIIPC)');
-  const [verifiedEvidence, setVerifiedEvidence] = useState<string[]>([]);
+  const [verifiedEvidence, setVerifiedEvidence] = useState<string[]>(finding.evidenceIds || []);
   const [showSavedFeedback, setShowSavedFeedback] = useState(false);
-
-  useEffect(() => {
-    if (finding) {
-      setSelectedStatus(finding.status === 'Pending Review' ? 'Confirmed Concern' : finding.status);
-      setRemarks(finding.supervisorRemarks || '');
-      setVerifiedEvidence(finding.evidenceIds || []);
-      setShowSavedFeedback(false);
-    }
-  }, [finding]);
-
-  if (!isOpen || !finding) return null;
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const findingEvidences = evidenceItems.filter(e => finding.evidenceIds.includes(e.id));
 
@@ -50,9 +53,10 @@ export const SupervisorDrawer: React.FC<SupervisorDrawerProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!remarks.trim()) {
-      alert('Please provide supervisory remarks and rationale before recording your official assessment.');
+      setValidationError('Supervisory remarks are required before submitting this assessment.');
       return;
     }
+    setValidationError(null);
     onSaveAssessment(finding.id, selectedStatus, remarks, reviewerName);
     setShowSavedFeedback(true);
     setTimeout(() => {
@@ -62,11 +66,9 @@ export const SupervisorDrawer: React.FC<SupervisorDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-slate-900/40 backdrop-blur-sm flex justify-end animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-[#FFFFFF] text-[#09090B] h-full shadow-2xl flex flex-col border-l border-[#E4E4E7] overflow-y-auto">
-        
-        {/* Drawer Header */}
-        <div className="bg-[#FAFAFA] text-[#09090B] p-5 sticky top-0 z-10 border-b border-[#E4E4E7]">
+    <div className="w-full max-w-2xl bg-[#FFFFFF] text-[#09090B] h-full shadow-2xl flex flex-col border-l border-[#E4E4E7] overflow-y-auto">
+      {/* Drawer Header */}
+      <div className="bg-[#FAFAFA] text-[#09090B] p-5 sticky top-0 z-10 border-b border-[#E4E4E7]">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <span className="px-2 py-0.5 rounded-md text-xs font-mono font-bold bg-indigo-50 text-[#4F46E5] border border-indigo-200">
@@ -106,25 +108,23 @@ export const SupervisorDrawer: React.FC<SupervisorDrawerProps> = ({
         {/* Drawer Content */}
         <div className="p-6 space-y-6 flex-1 bg-[#FFFFFF]">
           
-          {/* Statutory Mandate Notice */}
-          <div className="bg-amber-50 border-l-4 border-amber-500 p-3.5 rounded-xl text-xs text-[#27272A] leading-relaxed flex items-start space-x-2.5">
-            <Scale className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-semibold text-amber-800">Human-in-the-Loop Supervisory Protocol</p>
-              <p className="text-amber-700 mt-0.5">
-                The parameters below represent <strong className="text-amber-900">preliminary telemetry signals</strong> surfaced by SAT-SA algorithms. Final regulatory determination rests solely with the designated NCIIPC supervisory officer based on forensic evidence verification.
-              </p>
+          {/* Verification Context Notice */}
+          <div className="bg-[#FAFAFA] border border-[#E4E4E7] p-3 rounded-xl text-xs text-[#71717A] flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Scale className="w-4 h-4 text-[#4F46E5] shrink-0" />
+              <span>Verify corroborated telemetry artifacts and assign supervisory status.</span>
             </div>
+            <span className="font-mono text-[10px] text-[#71717A]">SEC-70A OVERSIGHT</span>
           </div>
 
           {/* Signal Diagnostics Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="bg-[#FAFAFA] p-3 rounded-xl border border-[#E4E4E7]">
-              <span className="text-[11px] uppercase tracking-wider text-[#71717A] block font-medium">Priority Level</span>
+              <span className="text-[11px] uppercase tracking-wider text-[#71717A] block font-medium">Priority</span>
               <span className="font-bold text-sm text-[#EA580C] mt-0.5 block">{finding.priority}</span>
             </div>
             <div className="bg-[#FAFAFA] p-3 rounded-xl border border-[#E4E4E7]">
-              <span className="text-[11px] uppercase tracking-wider text-[#71717A] block font-medium">Signal Score</span>
+              <span className="text-[11px] uppercase tracking-wider text-[#71717A] block font-medium">Risk Score</span>
               <span className="font-bold text-sm text-[#4F46E5] mt-0.5 block font-mono">{finding.signalScore}/100</span>
             </div>
             <div className="bg-[#FAFAFA] p-3 rounded-xl border border-[#E4E4E7]">
@@ -142,17 +142,17 @@ export const SupervisorDrawer: React.FC<SupervisorDrawerProps> = ({
             <div className="bg-[#FAFAFA] p-4 rounded-xl border border-[#E4E4E7]">
               <h3 className="text-xs uppercase tracking-wider font-bold text-[#4F46E5] mb-2 flex items-center space-x-1.5">
                 <FileText className="w-3.5 h-3.5 text-[#4F46E5]" />
-                <span>Automated Execution-Gap Signal Observation</span>
+                <span>Execution-Gap Observation</span>
               </h3>
               <p className="text-sm text-[#27272A] leading-relaxed">
                 {finding.systemObservation}
               </p>
             </div>
 
-            <div className="bg-orange-50/50 p-4 rounded-xl border border-orange-200">
+            <div className="bg-orange-50/40 p-4 rounded-xl border border-orange-200">
               <h3 className="text-xs uppercase tracking-wider font-bold text-[#EA580C] mb-1.5 flex items-center space-x-1.5">
                 <AlertOctagon className="w-3.5 h-3.5 text-[#EA580C]" />
-                <span>Potential Operational Impact on Critical Infrastructure</span>
+                <span>Operational Impact Assessment</span>
               </h3>
               <p className="text-sm text-[#27272A] leading-relaxed">
                 {finding.potentialImpact}
@@ -314,6 +314,11 @@ export const SupervisorDrawer: React.FC<SupervisorDrawerProps> = ({
 
             {/* Remarks / Rationale */}
             <div>
+              {validationError && (
+                <div className="mb-2 p-2 bg-red-50 border border-red-200 text-[#DC2626] rounded-lg text-xs font-semibold">
+                  {validationError}
+                </div>
+              )}
               <label className="text-xs font-bold text-[#71717A] block mb-1">
                 Official Rationale & Directive to CSE <span className="text-[#EA580C]">*</span>
               </label>
@@ -360,6 +365,27 @@ export const SupervisorDrawer: React.FC<SupervisorDrawerProps> = ({
 
         </div>
       </div>
+  );
+};
+
+export const SupervisorDrawer: React.FC<SupervisorDrawerProps> = ({
+  finding,
+  isOpen,
+  onClose,
+  evidenceItems,
+  onSaveAssessment
+}) => {
+  if (!isOpen || !finding) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-hidden bg-slate-900/40 backdrop-blur-sm flex justify-end animate-in fade-in duration-200">
+      <SupervisorDrawerContent
+        key={finding.id}
+        finding={finding}
+        onClose={onClose}
+        evidenceItems={evidenceItems}
+        onSaveAssessment={onSaveAssessment}
+      />
     </div>
   );
 };

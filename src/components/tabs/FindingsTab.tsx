@@ -134,7 +134,7 @@ export const FindingsTab: React.FC<FindingsTabProps> = ({
           <div className="bg-[#F4F4F5] border border-[#E4E4E7] rounded-xl px-3 py-1.5 text-xs text-[#059669] flex items-center space-x-2">
             <Scale className="w-4 h-4 text-[#059669] shrink-0" />
             <span>
-              <strong className="text-[#09090B]">{findings.filter(f => f.status === 'Pending Review').length}</strong> findings awaiting human assessment
+              <strong className="text-[#09090B]">{findings.filter(f => f.status === 'Pending Review').length}</strong> findings pending review
             </span>
           </div>
         </div>
@@ -241,7 +241,7 @@ export const FindingsTab: React.FC<FindingsTabProps> = ({
                   }}
                 >
                   <div className="flex items-center space-x-1">
-                    <span>Signal Score</span>
+                    <span>Risk Score</span>
                     <ArrowUpDown className="w-3 h-3" />
                   </div>
                 </th>
