@@ -38,13 +38,13 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="px-6 py-3.5 flex items-center justify-between gap-4">
         {/* Brand / Logo */}
         <div className="flex items-center space-x-3 cursor-pointer" onClick={() => onNavigateTab('overview')}>
-          <div className="w-10 h-10 rounded-xl bg-warm-100 border border-warm-200 flex items-center justify-center">
-            <Shield className="w-5 h-5 text-emerald-700" />
+          <div className="w-10 h-10 rounded-xl bg-white border border-emerald-300/80 shadow-xs flex items-center justify-center ring-2 ring-emerald-500/10">
+            <Shield className="w-5 h-5 text-emerald-600 fill-emerald-50" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
               <span className="font-bold text-lg text-warm-900 tracking-tight font-serif">SAT-SA</span>
-              <span className="px-2 py-0.5 text-[9px] uppercase font-bold tracking-wider rounded-md bg-warm-200 text-warm-800 border border-warm-300/80">
+              <span className="px-2 py-0.5 text-[9px] uppercase font-bold tracking-wider rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200/80">
                 Supervisory Core
               </span>
             </div>
