@@ -3,6 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "contributors": [
+    {
+      "name": "Yash Barfa",
+      "email": "yashbarfa67@gmail.com",
+      "url": "https://github.com/YashBarfa0603"
+    },
+    {
+      "name": "Priyansh Shrivastav",
+      "email": "priyanshshrivastav8@gmail.com",
+      "url": "https://github.com/priyanshshrivastav23-source"
+    }
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
