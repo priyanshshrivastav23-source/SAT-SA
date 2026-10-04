@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -20,8 +22,61 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: -0.011em;
   }
+
+  code, kbd, samp, pre, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  }
+}
+
+/* ThreeUI Signature Visual Utilities */
+.threeui-card {
+  background: #FFFFFF;
+  border: 1px solid #E7E5E4;
+  border-radius: 14px;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.threeui-card:hover {
+  border-color: #D6D3D1;
+  box-shadow: 0 6px 24px -4px rgba(28, 25, 23, 0.06);
+  transform: translateY(-1.5px);
+}
+
+.threeui-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: -0.01em;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid #E7E5E4;
+  background: #F5F5F4;
+  color: #57534E;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.threeui-pill:hover {
+  background: #E7E5E4;
+  color: #1C1917;
+  border-color: #D6D3D1;
+}
+
+.threeui-pill-active {
+  background: #1C1917 !important;
+  color: #FAFAF9 !important;
+  border-color: #1C1917 !important;
+  box-shadow: 0 2px 8px -1px rgba(28, 25, 23, 0.18);
+}
+
+.threeui-dots {
+  background-image: radial-gradient(#E7E5E4 1px, transparent 1px);
+  background-size: 16px 16px;
 }
 
 /* Custom sleek scrollbar */

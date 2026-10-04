@@ -95,10 +95,38 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* ThreeUI Browse Bar: 6 Supervisory Lenses Quick Filter Strip */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+        <span className="text-[10px] font-mono font-bold uppercase text-warm-400 shrink-0 mr-1">
+          Lenses:
+        </span>
+        <Link href="/findings" className="threeui-pill threeui-pill-active shrink-0">
+          All System Findings (7)
+        </Link>
+        <Link href="/findings?category=Execution+Gap" className="threeui-pill shrink-0">
+          Execution Gap (2)
+        </Link>
+        <Link href="/negative-space" className="threeui-pill shrink-0">
+          Negative Space Radar (1)
+        </Link>
+        <Link href="/benchmarks" className="threeui-pill shrink-0">
+          Peer Benchmark (1)
+        </Link>
+        <Link href="/findings?category=Goodhart+Lens" className="threeui-pill shrink-0">
+          Goodhart Lens (1)
+        </Link>
+        <Link href="/data-quality" className="threeui-pill shrink-0">
+          Data Quality (1)
+        </Link>
+        <Link href="/integrity" className="threeui-pill shrink-0">
+          Evidence Integrity (1)
+        </Link>
+      </div>
+
       {/* 6 Core KPI Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
         {/* Card 1: Total Entities */}
-        <div className="bg-white p-4 rounded-xl border border-warm-200/90 shadow-xs hover:shadow-sm transition-all relative overflow-hidden group">
+        <div className="threeui-card p-4 relative overflow-hidden group">
           <div className="absolute top-0 left-0 right-0 h-1 bg-warm-400 group-hover:h-1.5 transition-all"></div>
           <div className="flex items-center justify-between text-warm-500 text-xs">
             <span className="font-medium">Total Entities</span>
@@ -113,7 +141,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Card 2: Records Processed */}
-        <div className="bg-white p-4 rounded-xl border border-warm-200/90 shadow-xs hover:shadow-sm transition-all relative overflow-hidden group">
+        <div className="threeui-card p-4 relative overflow-hidden group">
           <div className="absolute top-0 left-0 right-0 h-1 bg-emerald-600 group-hover:h-1.5 transition-all"></div>
           <div className="flex items-center justify-between text-warm-500 text-xs">
             <span className="font-medium">Records Ingested</span>
@@ -128,7 +156,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Card 3: Findings for Review */}
-        <div className="bg-white p-4 rounded-xl border border-warm-200/90 shadow-xs hover:shadow-sm transition-all relative overflow-hidden group">
+        <div className="threeui-card p-4 relative overflow-hidden group">
           <div className="absolute top-0 left-0 right-0 h-1 bg-amber-500 group-hover:h-1.5 transition-all"></div>
           <div className="flex items-center justify-between text-warm-500 text-xs">
             <span className="font-medium">Active Findings</span>
@@ -143,7 +171,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Card 4: High-Priority Cases */}
-        <div className="bg-white p-4 rounded-xl border border-warm-200/90 shadow-xs hover:shadow-sm transition-all relative overflow-hidden group">
+        <div className="threeui-card p-4 relative overflow-hidden group">
           <div className="absolute top-0 left-0 right-0 h-1 bg-orange-600 group-hover:h-1.5 transition-all"></div>
           <div className="flex items-center justify-between text-warm-500 text-xs">
             <span className="font-medium">High Priority</span>
@@ -158,7 +186,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Card 5: Data Quality */}
-        <div className="bg-white p-4 rounded-xl border border-warm-200/90 shadow-xs hover:shadow-sm transition-all relative overflow-hidden group">
+        <div className="threeui-card p-4 relative overflow-hidden group">
           <div className="absolute top-0 left-0 right-0 h-1 bg-warm-600 group-hover:h-1.5 transition-all"></div>
           <div className="flex items-center justify-between text-warm-500 text-xs">
             <span className="font-medium">Data Quality</span>
@@ -173,7 +201,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Card 6: Integrity Status */}
-        <div className="bg-white p-4 rounded-xl border border-warm-200/90 shadow-xs hover:shadow-sm transition-all relative overflow-hidden group">
+        <div className="threeui-card p-4 relative overflow-hidden group">
           <div className="absolute top-0 left-0 right-0 h-1 bg-emerald-700 group-hover:h-1.5 transition-all"></div>
           <div className="flex items-center justify-between text-warm-500 text-xs">
             <span className="font-medium">Evidence Integrity</span>
