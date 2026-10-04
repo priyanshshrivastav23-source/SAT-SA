@@ -1,33 +1,36 @@
-# React + TypeScript + Vite
+# SAT-SA: Supervisory Analytics Tool for SOC Assessment
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+SAT-SA is an oversight and execution-gap surveillance dashboard developed for the **National Critical Information Infrastructure Protection Centre (NCIIPC)** and **NTRO Cyber Supervisory Wing** pursuant to statutory mandates under Section 70A of the Information Technology Act.
 
-Currently, two official plugins are available:
+## Key Features
+- **Statutory Human-in-the-Loop Supervision**: Case adjudication drawer allowing supervisory officers to record determinations and official remarks.
+- **Execution-Gap Surveillance**: Tracks systemic failure modes including Alert Triage Stagnation, Premature False-Positive Disposal, and Log Ingestion Blindspots.
+- **Admissible Evidence Repository**: Telemetry artifacts with cryptographic SHA-256 integrity verification aligned with Section 65B of the Indian Evidence / IT Act.
+- **Incident Investigation SLA Auditing**: Monitored containment latency against the 4.0h statutory benchmark.
+- **Compliance Reporting & Audit Trail**: Immutable logging and one-click export for regulatory reporting.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Getting Started
 
-## React Compiler
+```bash
+# Clone the repository
+git clone https://github.com/priyanshshrivastav23-source/SAT-SA.git
+cd SAT-SA
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Install dependencies
+npm install
 
-## Expanding the Oxlint configuration
+# Run development server
+npm run dev
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+# Run linting
+npm run lint
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+# Build for production
+npm run build
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
-"# SAT-SA" 
+## Contributors
+
+- **Yash Barfa** ([@YashBarfa0603](https://github.com/YashBarfa0603))
+- **Priyansh Shrivastav** ([@priyanshshrivastav23-source](https://github.com/priyanshshrivastav23-source))
+ 

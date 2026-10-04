@@ -60,12 +60,12 @@ export function App() {
     const now = new Date();
     const formattedTimestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')} IST`;
 
+    const targetFinding = findings.find(f => f.id === findingId);
+
     // 1. Update Finding state
-    let targetFinding: Finding | undefined;
     setFindings(prevFindings =>
       prevFindings.map(f => {
         if (f.id === findingId) {
-          targetFinding = f;
           return {
             ...f,
             status,

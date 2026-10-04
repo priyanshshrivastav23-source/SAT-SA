@@ -39,6 +39,9 @@ export const FindingsTab: React.FC<FindingsTabProps> = ({
       f.ruleId.toLowerCase().includes(filterState.searchQuery.toLowerCase()) ||
       f.category.toLowerCase().includes(filterState.searchQuery.toLowerCase());
 
+    const matchesSector =
+      filterState.selectedSector === '' || filterState.selectedSector === 'ALL' || f.sector === filterState.selectedSector;
+
     const matchesPriority =
       filterState.selectedPriority === '' || filterState.selectedPriority === 'ALL' || f.priority === filterState.selectedPriority;
 
@@ -48,10 +51,21 @@ export const FindingsTab: React.FC<FindingsTabProps> = ({
     const matchesCSE =
       filterState.selectedCSE === '' || filterState.selectedCSE === 'ALL' || f.cseCode === filterState.selectedCSE;
 
-    return matchesSearch && matchesPriority && matchesStatus && matchesCSE;
+    return matchesSearch && matchesSector && matchesPriority && matchesStatus && matchesCSE;
   }).sort((a, b) => {
     if (sortField === 'signalScore') {
       return sortAsc ? a.signalScore - b.signalScore : b.signalScore - a.signalScore;
+    }
+    if (sortField === 'detectedAt') {
+      const dateA = new Date(a.detectedAt).getTime();
+      const dateB = new Date(b.detectedAt).getTime();
+      return sortAsc ? dateA - dateB : dateB - dateA;
+    }
+    if (sortField === 'priority') {
+      const priorityOrder: Record<Priority, number> = { Critical: 4, High: 3, Medium: 2, Low: 1 };
+      const scoreA = priorityOrder[a.priority] || 0;
+      const scoreB = priorityOrder[b.priority] || 0;
+      return sortAsc ? scoreA - scoreB : scoreB - scoreA;
     }
     return 0;
   });
