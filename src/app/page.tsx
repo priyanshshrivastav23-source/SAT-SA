@@ -33,6 +33,8 @@ import {
 import { satSaService } from '@/services/satSaService';
 import { EntitySummary, Finding } from '@/types/sat-sa';
 
+import { MeridianOrbitalHorizon } from '@/components/meridian/MeridianOrbitalHorizon';
+
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState<any>(null);
@@ -48,52 +50,16 @@ export default function DashboardPage() {
 
   if (loading || !summary) {
     return (
-      <div className="p-8 text-center text-warm-500 font-mono text-xs">
-        Loading supervisory dashboard metrics...
+      <div className="p-12 text-center text-warm-500 font-mono text-xs">
+        Loading Meridian supervisory telemetry...
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      {/* Top Banner Notice */}
-      <div className="bg-gradient-to-r from-warm-100 via-warm-100/90 to-warm-50 p-5 rounded-2xl border border-warm-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-800 bg-emerald-100/80 px-2.5 py-0.5 rounded-full border border-emerald-300/80">
-              National Oversight Desk
-            </span>
-            <span className="text-[11px] font-mono font-medium text-warm-600 bg-warm-200/60 px-2 py-0.5 rounded-md">
-              Cycle: Q3 2026 Active
-            </span>
-            <span className="text-[11px] font-mono text-warm-500">
-              7 Strategic CSEs • 100% Ingestion Parity
-            </span>
-          </div>
-          <h1 className="text-xl font-bold text-warm-900 mt-1.5 tracking-tight font-serif">
-            Supervisory Analytics Overview
-          </h1>
-          <p className="text-xs text-warm-600 mt-1 max-w-2xl leading-relaxed">
-            Continuous empirical surveillance of reported SOC claims against real-time sensor telemetry, silent telemetry voids, and algorithmic execution integrity under Section 70A.
-          </p>
-        </div>
-
-        <div className="flex items-center space-x-2 shrink-0">
-          <Link
-            href="/review-planner"
-            className="px-3.5 py-2 rounded-xl bg-warm-900 hover:bg-warm-800 text-warm-50 text-xs font-semibold flex items-center space-x-1.5 transition shadow-xs hover:shadow-sm"
-          >
-            <span>Review Planner</span>
-            <ArrowRight className="w-3.5 h-3.5 text-warm-300" />
-          </Link>
-          <Link
-            href="/findings"
-            className="px-3.5 py-2 rounded-xl bg-warm-200/90 hover:bg-warm-300 text-warm-900 text-xs font-semibold transition border border-warm-300/60"
-          >
-            All Findings ({summary.findingsRequiringReview})
-          </Link>
-        </div>
-      </div>
+      {/* ThreeUI Meridian Atmospheric Orbital Horizon Hero */}
+      <MeridianOrbitalHorizon />
 
       {/* ThreeUI Browse Bar: 6 Supervisory Lenses Quick Filter Strip */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
