@@ -61,6 +61,38 @@ export interface EntitySummary {
   nodalOfficer: string;
 }
 
+export interface CapabilityIndicator {
+  name: string;
+  score: number;
+  benchmarkAverage: number;
+  status: 'Healthy' | 'Review Recommended' | 'Requires Attention';
+  description?: string;
+}
+
+export interface ExecutionGapSignal {
+  signal: string;
+  description: string;
+  observedValue: string;
+  peerBaseline: string;
+  difference: string;
+  confidence: number;
+  evidenceCount: number;
+}
+
+export interface RawSocRecord {
+  record_id: string;
+  timestamp: string;
+  entity_id: string;
+  asset_id: string;
+  severity: string;
+  case_id: string;
+  workflow_state: string;
+  escalation: string;
+  investigation: string;
+  remediation: string;
+  sha256_hash?: string;
+}
+
 export interface Finding {
   id: string;
   title: string;
@@ -76,6 +108,7 @@ export interface Finding {
   whyFlagged: string;
   supportingEvidenceCount: number;
   evidenceIds: string[];
+  confidenceScore?: number;
   relevantKpiComparison: {
     reportedValue: string;
     observedValue: string;
@@ -91,6 +124,22 @@ export interface Finding {
   examinerNotes?: string;
   status: FindingStatus;
   auditEvents: string[];
+  counterfactual?: string;
+  nonAutonomousReason?: string;
+  signalWeights?: {
+    name: string;
+    weight: number;
+    observedValue: string;
+    peerBaseline: string;
+    score: number;
+  }[];
+  rawRecords?: RawSocRecord[];
+  evidenceLedger?: {
+    recordHash: string;
+    merkleRoot: string;
+    previousBatchHash: string;
+    verificationStatus: string;
+  };
 }
 
 export interface NegativeSpaceItem {
@@ -206,4 +255,18 @@ export interface AuditEvent {
   targetRecord: string;
   entityCode: string;
   result: string;
+}
+
+export interface ReviewQueueItem {
+  id: string;
+  priority: 'HIGH' | 'MEDIUM' | 'LOW';
+  findingId: string;
+  findingTitle: string;
+  entity: string;
+  entityId: string;
+  reason: string;
+  evidence: string;
+  suggestedAction: string;
+  peerContext: string;
+  suggestedQuestions: string[];
 }

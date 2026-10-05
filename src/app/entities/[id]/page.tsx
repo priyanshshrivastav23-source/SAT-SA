@@ -148,43 +148,269 @@ export default function EntityDetailPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="p-3 bg-warm-50 rounded-xl border border-warm-200">
             <span className="text-[10px] font-bold text-warm-500 uppercase tracking-wider block">
-              Discrepancy Index
+              Overall Supervisory Indicator
             </span>
             <span className="text-xl font-bold font-mono text-orange-700 block mt-0.5">
-              {entity.evidenceMetrics.discrepancyIndex}/100
+              {entity.code === 'CSE Alpha' ? '72 / 100' : `${Math.round(100 - entity.evidenceMetrics.discrepancyIndex * 0.4)} / 100`}
             </span>
-            <span className="text-[10px] text-warm-500">Calculated variance</span>
+            <span className="text-[10px] text-warm-500 font-sans">Examiner Decision Support</span>
           </div>
 
           <div className="p-3 bg-warm-50 rounded-xl border border-warm-200">
             <span className="text-[10px] font-bold text-warm-500 uppercase tracking-wider block">
-              Data Quality Score
+              Supervisory Status
             </span>
-            <span className="text-xl font-bold font-mono text-warm-800 block mt-0.5">
+            <span className="text-sm font-bold text-orange-700 block mt-1.5 font-sans">
+              Review Recommended
+            </span>
+            <span className="text-[10px] text-warm-500">Non-autonomous flag</span>
+          </div>
+
+          <div className="p-3 bg-warm-50 rounded-xl border border-warm-200">
+            <span className="text-[10px] font-bold text-warm-500 uppercase tracking-wider block">
+              Data Confidence
+            </span>
+            <span className="text-xl font-bold font-mono text-emerald-800 block mt-0.5">
               {entity.dataQualityScore}%
             </span>
-            <span className="text-[10px] text-warm-500">Schema & Temporal Fidelity</span>
+            <span className="text-[10px] text-warm-500">Completeness & Consistency</span>
           </div>
 
           <div className="p-3 bg-warm-50 rounded-xl border border-warm-200">
             <span className="text-[10px] font-bold text-warm-500 uppercase tracking-wider block">
-              Negative Space Risk
+              Priority Finding
             </span>
-            <span className="text-xl font-bold font-mono text-violet-700 block mt-0.5">
-              {entity.negativeSpaceScore}/100
-            </span>
-            <span className="text-[10px] text-warm-500">Potential Ingestion Gaps</span>
+            <Link href="/findings/F-1024" className="text-sm font-bold text-warm-900 block mt-1.5 hover:underline font-mono">
+              F-1024 (Inspect) →
+            </Link>
+            <span className="text-[10px] text-warm-500">Claim-vs-Reality Mismatch</span>
           </div>
+        </div>
+      </div>
 
-          <div className="p-3 bg-warm-50 rounded-xl border border-warm-200">
-            <span className="text-[10px] font-bold text-warm-500 uppercase tracking-wider block">
-              Total Signals Flagged
+      {/* Eight Capability Indicators (Section 10) */}
+      <div className="bg-white p-6 rounded-2xl border border-warm-200 shadow-sm space-y-4">
+        <div className="border-b border-warm-100 pb-3">
+          <div className="flex items-center space-x-2">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              Supervisory Baseline Framework
             </span>
-            <span className="text-xl font-bold font-mono text-warm-900 block mt-0.5">
-              {findings.length}
+            <span className="text-[10px] font-mono bg-warm-100 text-warm-700 px-2 py-0.5 rounded">
+              8 Core Dimensions
             </span>
-            <span className="text-[10px] text-warm-500">Requires human review</span>
           </div>
+          <h2 className="text-base font-bold text-warm-900 mt-1 font-serif">
+            Supervisory Capability Indicators — {entity.name}
+          </h2>
+          <p className="text-xs text-warm-500 mt-0.5">
+            Empirical capability ratings across 8 functional cybersecurity domains. Designed to support examiner judgement, not an automated verdict.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          {[
+            { name: 'Threat Detection', score: 81, avg: 78, status: 'Healthy' },
+            { name: 'Investigation', score: 58, avg: 76, status: 'Review Recommended' },
+            { name: 'Escalation', score: 52, avg: 74, status: 'Review Recommended' },
+            { name: 'Incident Response', score: 64, avg: 75, status: 'Review Recommended' },
+            { name: 'Security Operations', score: 76, avg: 79, status: 'Healthy' },
+            { name: 'Governance & Oversight', score: 79, avg: 80, status: 'Healthy' },
+            { name: 'Operational Discipline', score: 61, avg: 77, status: 'Review Recommended' },
+            { name: 'Cyber Resilience', score: 74, avg: 75, status: 'Healthy' },
+          ].map((cap) => (
+            <div key={cap.name} className="p-3.5 rounded-xl bg-warm-50/70 border border-warm-200/90 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-semibold text-warm-900">{cap.name}</span>
+                <div className="flex items-center space-x-2">
+                  <span className="font-mono font-bold text-warm-900">{cap.score}/100</span>
+                  <span
+                    className={`text-[10px] px-2 py-0.2 rounded-full font-semibold ${
+                      cap.status === 'Healthy'
+                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                        : 'bg-amber-50 text-amber-800 border border-amber-200'
+                    }`}
+                  >
+                    {cap.status}
+                  </span>
+                </div>
+              </div>
+              <div className="w-full bg-warm-200/80 rounded-full h-2 overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    cap.score < 65 ? 'bg-orange-600' : cap.score < 75 ? 'bg-amber-500' : 'bg-emerald-600'
+                  }`}
+                  style={{ width: `${cap.score}%` }}
+                ></div>
+              </div>
+              <div className="flex justify-between text-[10px] text-warm-500 font-mono">
+                <span>Sector Peer Median: {cap.avg}/100</span>
+                <span>Delta: {cap.score - cap.avg > 0 ? `+${cap.score - cap.avg}` : `${cap.score - cap.avg}`}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Operational Activity — Last 30 Days (Section 11) */}
+      <div className="bg-white p-6 rounded-2xl border border-warm-200 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-warm-100 pb-3">
+          <div>
+            <h3 className="text-base font-bold text-warm-900 font-serif">
+              Operational Activity — Last 30 Days
+            </h3>
+            <p className="text-xs text-warm-500 mt-0.5">
+              Continuous monitoring of alert ingress, closure volume, and escalation frequency. Note the abnormal triage spike and escalation collapse on Days 18–22.
+            </p>
+          </div>
+          <span className="text-[11px] font-mono text-orange-800 bg-orange-50 px-2.5 py-1 rounded-md border border-orange-200 font-bold self-start sm:self-auto">
+            Telemetry Anomaly Flagged (Days 18-22)
+          </span>
+        </div>
+
+        <div className="h-64 w-full pt-2">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={[
+                { day: 'D1-3', alerts: 1420, closures: 1390, escalations: 180 },
+                { day: 'D4-6', alerts: 1560, closures: 1510, escalations: 210 },
+                { day: 'D7-9', alerts: 1380, closures: 1340, escalations: 190 },
+                { day: 'D10-12', alerts: 1490, closures: 1460, escalations: 200 },
+                { day: 'D13-15', alerts: 1620, closures: 1580, escalations: 220 },
+                { day: 'D16-17', alerts: 1580, closures: 1550, escalations: 195 },
+                { day: 'D18-20', alerts: 3840, closures: 3820, escalations: 12 },
+                { day: 'D21-22', alerts: 3410, closures: 3390, escalations: 15 },
+                { day: 'D23-25', alerts: 1520, closures: 1480, escalations: 190 },
+                { day: 'D26-28', alerts: 1440, closures: 1410, escalations: 185 },
+                { day: 'D29-30', alerts: 1390, closures: 1370, escalations: 175 }
+              ]}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#E7E5E4" />
+              <XAxis dataKey="day" stroke="#78716C" fontSize={11} />
+              <YAxis stroke="#78716C" fontSize={11} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#FFFFFF',
+                  borderColor: '#E7E5E4',
+                  borderRadius: '0.75rem',
+                  fontSize: '11px'
+                }}
+              />
+              <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+              <Bar dataKey="alerts" name="Alert Volume" fill="#78716C" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="closures" name="Closure Volume" fill="#059669" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="escalations" name="Escalation Volume" fill="#D97706" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Execution Gap Signals Section (Section 12) */}
+      <div className="bg-white p-6 rounded-2xl border border-warm-200 shadow-sm space-y-4">
+        <div className="border-b border-warm-100 pb-3">
+          <div className="flex items-center space-x-2">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              Algorithmic Detection Lens
+            </span>
+            <span className="text-[10px] font-mono bg-warm-100 text-warm-700 px-2 py-0.5 rounded">
+              Execution Gap Engine
+            </span>
+          </div>
+          <h3 className="text-base font-bold text-warm-900 mt-1 font-serif">
+            Execution Gap Signals
+          </h3>
+          <p className="text-xs text-warm-500 mt-0.5">
+            Empirically identified deviations where observed SOC operational evidence diverges from expected execution baseline.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
+          {[
+            {
+              signal: 'Fast High-Severity Closure',
+              desc: 'Critical cases are being closed much faster than peer baseline.',
+              observed: '3 min median',
+              baseline: '47 min median',
+              diff: '-93.6%',
+              confidence: 91,
+              evidence: 184
+            },
+            {
+              signal: 'Critical Without Escalation',
+              desc: 'Critical alerts reached closure without expected escalation evidence.',
+              observed: '1.2% escalated',
+              baseline: '14.8% escalated',
+              diff: '-91.9%',
+              confidence: 93,
+              evidence: 92
+            },
+            {
+              signal: 'Shallow Investigation',
+              desc: 'Investigation records exist but show limited operational activity.',
+              observed: '48 chars/note',
+              baseline: '420 chars/note',
+              diff: '-88.6%',
+              confidence: 89,
+              evidence: 114
+            },
+            {
+              signal: 'Recurrence Without Remediation',
+              desc: 'Repeated alerts exist without corresponding remediation evidence.',
+              observed: '68% recurrence',
+              baseline: '12% recurrence',
+              diff: '+466.0%',
+              confidence: 87,
+              evidence: 64
+            },
+            {
+              signal: 'Template-Driven Investigation',
+              desc: 'Investigation notes show unusually high similarity across cases.',
+              observed: '84% template match',
+              baseline: '18% template match',
+              diff: '+366.7%',
+              confidence: 92,
+              evidence: 156
+            },
+            {
+              signal: 'Alert-to-Action Dead End',
+              desc: 'Expected downstream workflow activity (ticketing, containment) is missing.',
+              observed: '71% dead-end rate',
+              baseline: '9% dead-end rate',
+              diff: '+688.9%',
+              confidence: 90,
+              evidence: 88
+            }
+          ].map((gap) => (
+            <div key={gap.signal} className="p-4 rounded-xl bg-warm-50/80 border border-warm-200/90 space-y-3 flex flex-col justify-between hover:border-warm-300 transition-colors">
+              <div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-warm-900 leading-tight">{gap.signal}</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-orange-100 text-orange-800 border border-orange-200 font-bold shrink-0 ml-1">
+                    {gap.diff}
+                  </span>
+                </div>
+                <p className="text-[11px] text-warm-600 mt-1.5 leading-relaxed">{gap.desc}</p>
+              </div>
+
+              <div className="space-y-1.5 pt-2 border-t border-warm-200/60 font-mono text-[11px]">
+                <div className="flex justify-between text-warm-700">
+                  <span className="font-sans text-warm-500">Observed:</span>
+                  <strong className="text-orange-700">{gap.observed}</strong>
+                </div>
+                <div className="flex justify-between text-warm-700">
+                  <span className="font-sans text-warm-500">Peer Baseline:</span>
+                  <span>{gap.baseline}</span>
+                </div>
+                <div className="flex justify-between text-warm-700 pt-1 border-t border-warm-200/40">
+                  <span className="font-sans text-warm-500">Confidence:</span>
+                  <span className="text-emerald-800 font-bold">{gap.confidence}%</span>
+                </div>
+                <div className="flex justify-between text-warm-700">
+                  <span className="font-sans text-warm-500">Evidence Count:</span>
+                  <span className="text-warm-900 font-bold">{gap.evidence} cases</span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

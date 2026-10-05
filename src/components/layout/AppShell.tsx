@@ -19,9 +19,14 @@ import {
   ChevronRight,
   Shield,
   UserCheck,
-  AlertCircle
+  Play,
+  CheckCircle2,
+  Loader2,
+  Sparkles,
+  X
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { satSaService, ANALYSIS_STEPS } from '@/services/satSaService';
 
 interface NavGroup {
   groupName: string;
@@ -38,36 +43,49 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('Q3 2026 (Jul - Sep)');
+  const [isAnalysisModalOpen, setIsAnalysisModalOpen] = useState(false);
+  const [analysisStep, setAnalysisStep] = useState(0);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisDone, setAnalysisDone] = useState(false);
+
+  const startAnalysis = async () => {
+    setIsAnalysisModalOpen(true);
+    setIsAnalyzing(true);
+    setAnalysisDone(false);
+    setAnalysisStep(0);
+
+    await satSaService.runAnalysis((stepIndex) => {
+      setAnalysisStep(stepIndex);
+    });
+
+    setIsAnalyzing(false);
+    setAnalysisDone(true);
+  };
 
   const navGroups: NavGroup[] = [
     {
-      groupName: 'Overview',
+      groupName: 'Supervisory Core',
       items: [
-        { name: 'Dashboard', href: '/', icon: LayoutDashboard }
-      ]
-    },
-    {
-      groupName: 'Assessment',
-      items: [
+        { name: 'Overview', href: '/', icon: LayoutDashboard },
         { name: 'Entities', href: '/entities', icon: Building2 },
-        { name: 'Findings', href: '/findings', icon: AlertTriangle, badge: '7' },
-        { name: 'Negative Space Radar', href: '/negative-space', icon: Radar },
-        { name: 'Peer Benchmark', href: '/benchmarks', icon: BarChart3 }
+        { name: 'Findings', href: '/findings', icon: AlertTriangle, badge: '8 High' },
+        { name: 'Negative Space', href: '/negative-space', icon: Radar, badge: '3 Void' },
+        { name: 'Peer Benchmark', href: '/peer-benchmark', icon: BarChart3 }
       ]
     },
     {
-      groupName: 'Investigation',
+      groupName: 'Investigation & Review',
       items: [
+        { name: 'Review Planner', href: '/review-planner', icon: ClipboardList, badge: 'Sample 120' },
         { name: 'Evidence Explorer', href: '/evidence', icon: FileCheck2 },
-        { name: 'Review Planner', href: '/review-planner', icon: ClipboardList, badge: '5' }
+        { name: 'Audit', href: '/audit', icon: History }
       ]
     },
     {
-      groupName: 'Governance',
+      groupName: 'Verification Lenses',
       items: [
         { name: 'Data Quality', href: '/data-quality', icon: Database },
-        { name: 'Evidence Integrity', href: '/integrity', icon: ShieldCheck },
-        { name: 'Audit View', href: '/audit', icon: History }
+        { name: 'Evidence Integrity', href: '/integrity', icon: ShieldCheck }
       ]
     }
   ];
@@ -88,8 +106,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
             Supervisory Ingestion Active
           </span>
-          <span className="text-[10px] text-warm-500 font-mono bg-warm-200/60 px-2 py-0.5 rounded">
-            SYNTHETIC DEMO DATA
+          <span className="text-[10px] font-bold text-amber-900 font-mono bg-amber-100 border border-amber-300 px-2.5 py-0.5 rounded-full shadow-2xs">
+            ● DEMO MODE
           </span>
         </div>
       </div>
@@ -129,9 +147,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </kbd>
         </div>
 
-        {/* Period Selector & Examiner Profile */}
+        {/* Period Selector, Run Analysis & Examiner Profile */}
         <div className="flex items-center space-x-3 shrink-0">
-          <div className="relative">
+          <button
+            onClick={startAnalysis}
+            disabled={isAnalyzing}
+            className="px-3.5 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-warm-50 text-xs font-semibold flex items-center space-x-1.5 transition shadow-xs hover:shadow-sm disabled:opacity-50 cursor-pointer"
+            title="Trigger Multi-Lens Supervisory Analysis Pipeline"
+          >
+            {isAnalyzing ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
+            )}
+            <span>{isAnalyzing ? 'Analyzing...' : 'Run Analysis'}</span>
+          </button>
+
+          <div className="relative hidden sm:block">
             <select
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value)}
@@ -234,24 +266,27 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </nav>
           </div>
 
-          {/* Footer Operational Status */}
+          {/* Footer Operational Status (Section 6) */}
           <div className="p-3 border-t border-warm-200">
             {!isCollapsed ? (
-              <div className="p-2.5 bg-warm-100 rounded-xl border border-warm-200 text-xs">
-                <div className="flex items-center justify-between text-warm-700 font-medium">
+              <div className="p-2.5 bg-warm-100 rounded-xl border border-warm-200 text-xs space-y-1.5">
+                <div className="flex items-center justify-between text-warm-800 font-medium">
                   <div className="flex items-center space-x-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <span className="text-[11px]">SOC Telemetry Active</span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span className="text-[11px] font-semibold">System Status</span>
                   </div>
-                  <span className="font-mono text-[10px] text-warm-400">Q3</span>
+                  <span className="font-mono text-[10px] text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded font-bold">
+                    Offline / Local
+                  </span>
                 </div>
-                <p className="text-[10px] text-warm-500 mt-1 leading-snug">
-                  Section 70A IT Act Oversight Desk
-                </p>
+                <div className="flex items-center justify-between text-[10px] font-mono text-warm-600 pt-1 border-t border-warm-200/60">
+                  <span>Data: 5 CSEs</span>
+                  <span>125,430 Records</span>
+                </div>
               </div>
             ) : (
-              <div className="flex justify-center" title="SOC Telemetry Active">
-                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <div className="flex justify-center" title="System Status: Offline / Local (5 CSEs • 125,430 Records)">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
               </div>
             )}
           </div>
@@ -264,6 +299,85 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </main>
       </div>
+
+      {/* Interactive Run Analysis Simulation Modal (Section 27) */}
+      {isAnalysisModalOpen && (
+        <div className="fixed inset-0 z-50 bg-warm-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl border border-warm-200 shadow-xl max-w-lg w-full p-6 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] font-mono uppercase font-bold tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    Live Supervisory Pipeline
+                  </span>
+                  <span className="text-[10px] font-mono bg-warm-100 text-warm-600 px-2 py-0.5 rounded">
+                    Air-Gapped Local
+                  </span>
+                </div>
+                <h3 className="text-base font-bold text-warm-900 mt-1 font-serif">
+                  {analysisDone ? 'Analysis Complete' : 'Executing Supervisory Analytics Engine'}
+                </h3>
+                <p className="text-xs text-warm-500 mt-0.5">
+                  Multi-lens assessment across 125,430 records and 5 strategic CSE operational repositories.
+                </p>
+              </div>
+              <button
+                onClick={() => setIsAnalysisModalOpen(false)}
+                className="p-1 rounded-lg text-warm-400 hover:text-warm-700 hover:bg-warm-100 transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Step-by-step progress checklist */}
+            <div className="space-y-2.5 bg-warm-50/80 p-4 rounded-xl border border-warm-200/90 font-mono text-xs">
+              {ANALYSIS_STEPS.map((step, idx) => {
+                const isPassed = idx < analysisStep || analysisDone;
+                const isCurrent = idx === analysisStep && isAnalyzing;
+                return (
+                  <div key={step} className="flex items-center space-x-3">
+                    {isPassed ? (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    ) : isCurrent ? (
+                      <Loader2 className="w-4 h-4 text-amber-600 animate-spin shrink-0" />
+                    ) : (
+                      <span className="w-4 h-4 rounded-full border border-warm-300 flex items-center justify-center text-[9px] text-warm-400 shrink-0">
+                        {idx + 1}
+                      </span>
+                    )}
+                    <span
+                      className={cn(
+                        "text-xs transition-colors",
+                        isPassed ? "text-warm-800 font-semibold" : isCurrent ? "text-amber-900 font-bold" : "text-warm-400"
+                      )}
+                    >
+                      {step}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-between pt-2 border-t border-warm-200/70">
+              <span className="text-[11px] text-warm-500 font-mono">
+                {analysisDone ? '✓ All 7 supervisory lenses verified' : `Processing step ${analysisStep + 1} of ${ANALYSIS_STEPS.length}...`}
+              </span>
+              <button
+                onClick={() => {
+                  setIsAnalysisModalOpen(false);
+                  if (analysisDone) {
+                    window.location.reload();
+                  }
+                }}
+                className="px-4 py-2 rounded-xl bg-warm-900 hover:bg-warm-800 text-warm-50 text-xs font-semibold transition shadow-xs"
+              >
+                {analysisDone ? 'Close & View Dashboard' : 'Dismiss'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

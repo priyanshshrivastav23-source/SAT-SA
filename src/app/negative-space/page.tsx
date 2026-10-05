@@ -20,7 +20,8 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  CartesianGrid
+  CartesianGrid,
+  Legend
 } from 'recharts';
 import { satSaService } from '@/services/satSaService';
 import { NegativeSpaceItem } from '@/types/sat-sa';
@@ -58,55 +59,108 @@ export default function NegativeSpacePage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header (Section 13) */}
       <div className="bg-white p-6 rounded-2xl border border-warm-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-violet-700 bg-violet-50 px-2 py-0.5 rounded border border-violet-200 font-mono">
-              Negative Space Surveillance
+            <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-mono">
+              Negative Space Lens
             </span>
             <span className="text-[10px] font-mono bg-warm-100 text-warm-700 px-2 py-0.5 rounded">
-              Silent Telemetry Void Detection
+              Supervisory Void Detection
             </span>
           </div>
-          <h1 className="text-xl font-bold text-warm-900 mt-1">
-            Negative Space Radar & Telemetry Absence Analysis
+          <h1 className="text-xl font-bold text-warm-900 mt-1 font-serif">
+            Negative Space Radar
           </h1>
           <p className="text-xs text-warm-600 mt-0.5">
-            Detecting critical infrastructure assets exhibiting unexplained silences, missing expected alert categories, and off-hours telemetry drop-offs.
+            What should have happened but is missing? Detecting silent crown jewel assets and unmonitored operational voids.
           </p>
         </div>
 
-        <div className="p-3 bg-warm-50 rounded-xl border border-warm-200 text-xs">
-          <span className="font-semibold text-warm-900 block">Methodology Note:</span>
-          <span className="text-warm-500 text-[11px]">
-            Absence of evidence is correlated with historical baseline event density.
+        <div className="p-3 bg-amber-50/60 border border-amber-200 rounded-xl text-xs text-amber-900 max-w-sm">
+          <span className="font-semibold block font-sans">Supervisory Principle:</span>
+          <span className="text-[11px] text-amber-800 leading-snug">
+            The absence of expected baseline telemetry is often more revealing than the presence of noisy benign alerts.
           </span>
         </div>
       </div>
 
-      {/* Silence Duration Distribution Chart */}
-      <div className="bg-white p-5 rounded-2xl border border-warm-200 shadow-sm space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-sm font-bold text-warm-900">
-              Unexplained Ingestion Silence Duration by Asset (Hours)
-            </h3>
-            <p className="text-xs text-warm-500">
-              Consecutive hours with zero telemetry packets from critical assets
-            </p>
-          </div>
-          <span className="text-[10px] font-mono text-warm-500 bg-warm-100 px-2 py-0.5 rounded">
-            NCIIPC 4.0h Deadman Benchmark
-          </span>
+      {/* 5 Core Negative Space Metric Cards (Section 13) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        <div className="threeui-card p-4 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-orange-600"></div>
+          <span className="text-xs font-medium text-warm-500 block">Silent Critical Assets</span>
+          <span className="text-2xl font-bold font-mono text-orange-700 block mt-1">3</span>
+          <span className="text-[10px] text-warm-500 mt-0.5 block">Zero telemetry &gt; 14 days</span>
         </div>
 
-        <div className="h-56 w-full pt-2">
+        <div className="threeui-card p-4 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-amber-500"></div>
+          <span className="text-xs font-medium text-warm-500 block">Missing Alert Categories</span>
+          <span className="text-2xl font-bold font-mono text-amber-700 block mt-1">2</span>
+          <span className="text-[10px] text-warm-500 mt-0.5 block">Identity & Kerberos voids</span>
+        </div>
+
+        <div className="threeui-card p-4 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-violet-600"></div>
+          <span className="text-xs font-medium text-warm-500 block">Unexplained Activity Drops</span>
+          <span className="text-2xl font-bold font-mono text-violet-700 block mt-1">4</span>
+          <span className="text-[10px] text-warm-500 mt-0.5 block">Off-hours activity cliffs</span>
+        </div>
+
+        <div className="threeui-card p-4 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-warm-600"></div>
+          <span className="text-xs font-medium text-warm-500 block">Ghost Records</span>
+          <span className="text-2xl font-bold font-mono text-warm-800 block mt-1">7</span>
+          <span className="text-[10px] text-warm-500 mt-0.5 block">Orphaned tickets without logs</span>
+        </div>
+
+        <div className="threeui-card p-4 relative overflow-hidden group col-span-2 sm:col-span-1">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-emerald-600"></div>
+          <span className="text-xs font-medium text-warm-500 block">Coverage Gaps</span>
+          <span className="text-2xl font-bold font-mono text-emerald-800 block mt-1">5</span>
+          <span className="text-[10px] text-warm-500 mt-0.5 block">Non-forwarding agents</span>
+        </div>
+      </div>
+
+      {/* Expected vs Observed Activity Line Chart (Section 13) */}
+      <div className="bg-white p-6 rounded-2xl border border-warm-200 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-warm-100 pb-3">
+          <div>
+            <h3 className="text-sm font-bold text-warm-900 font-serif">
+              Expected Activity vs. Observed Telemetry Stream
+            </h3>
+            <p className="text-xs text-warm-500 mt-0.5">
+              Comparison of expected statistical baseline against actual observed events across key monitoring assets.
+            </p>
+          </div>
+          <div className="flex items-center space-x-3 text-xs font-mono">
+            <span className="flex items-center space-x-1.5 text-warm-600">
+              <span className="w-2.5 h-2.5 rounded-full bg-warm-400"></span>
+              <span>Expected Baseline</span>
+            </span>
+            <span className="flex items-center space-x-1.5 text-orange-700 font-bold">
+              <span className="w-2.5 h-2.5 rounded-full bg-orange-600"></span>
+              <span>Observed Activity</span>
+            </span>
+          </div>
+        </div>
+
+        <div className="h-60 w-full pt-1">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData}>
+            <BarChart
+              data={[
+                { asset: 'PAYMENT-DB-01', expected: 55, observed: 0 },
+                { asset: 'WEB-GATEWAY-02', expected: 30, observed: 2 },
+                { asset: 'SWIFT-04', expected: 22, observed: 0 },
+                { asset: 'AUTH-CLUSTER-01', expected: 100, observed: 14 },
+                { asset: 'SUBSTATION-400KV', expected: 45, observed: 3 }
+              ]}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#E7E5E4" />
-              <XAxis dataKey="name" stroke="#78716C" fontSize={11} />
-              <YAxis stroke="#78716C" fontSize={11} unit="h" />
+              <XAxis dataKey="asset" stroke="#78716C" fontSize={11} />
+              <YAxis stroke="#78716C" fontSize={11} unit=" ev/w" />
               <Tooltip
                 contentStyle={{
                   backgroundColor: '#FFFFFF',
@@ -115,7 +169,9 @@ export default function NegativeSpacePage() {
                   fontSize: '11px'
                 }}
               />
-              <Bar dataKey="silenceHours" name="Silence Duration (Hours)" fill="#7C3AED" radius={[4, 4, 0, 0]} />
+              <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
+              <Bar dataKey="expected" name="Expected Baseline (alerts/week)" fill="#A8A29E" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="observed" name="Observed Activity (alerts/week)" fill="#EA580C" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -173,72 +229,86 @@ export default function NegativeSpacePage() {
         </div>
       </div>
 
-      {/* Negative Space Radar Items Table */}
+      {/* Negative Space Radar Items Table (Section 13) */}
       <div className="bg-white rounded-2xl border border-warm-200 shadow-sm overflow-hidden">
-        <div className="px-5 py-3 bg-warm-100 border-b border-warm-200 flex items-center justify-between text-xs text-warm-600">
-          <span className="font-semibold text-warm-900">
-            Identified Telemetry Voids ({filteredItems.length})
-          </span>
-          <span className="text-[11px] font-mono text-warm-500">
-            Confirmed missing feeds are differentiated from unexplained low activity
+        <div className="px-5 py-3.5 bg-warm-100 border-b border-warm-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div>
+            <span className="font-bold text-warm-900 font-serif">
+              Identified Telemetry Voids ({filteredItems.length} Monitored Assets)
+            </span>
+            <p className="text-[11px] text-warm-500">
+              Correlating expected statistical baseline activity against actual observed telemetry packets.
+            </p>
+          </div>
+          <span className="text-[10px] font-mono text-warm-600 bg-white px-2.5 py-1 rounded border border-warm-200">
+            NCIIPC Ingestion Standard
           </span>
         </div>
 
-        <div className="divide-y divide-warm-100">
-          {filteredItems.map((item) => (
-            <div key={item.id} className="p-4 hover:bg-warm-50/80 transition flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="space-y-1.5 max-w-2xl">
-                <div className="flex items-center space-x-2">
-                  <span className="font-mono text-xs font-bold text-warm-900">{item.assetId}</span>
-                  <span className="text-xs text-warm-500">•</span>
-                  <span className="font-mono text-xs text-warm-700 font-semibold">{item.entityCode}</span>
-                  <span className="text-xs text-warm-500">•</span>
-                  <span className="text-[10px] px-2 py-0.2 rounded font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                    {item.criticality}
-                  </span>
-                </div>
-                <h4 className="text-xs font-bold text-warm-900">{item.assetName}</h4>
-                <p className="text-xs text-warm-600 leading-relaxed">
-                  <strong className="text-warm-800">Observed Potential Cause:</strong> {item.potentialRootCause}
-                </p>
-                <div className="text-[11px] text-warm-400 flex items-center space-x-3 pt-0.5">
-                  <span>Anomaly: <strong className="text-violet-700">{item.anomalyType}</strong></span>
-                  <span>•</span>
-                  <span>Last Heartbeat: {item.lastHeartbeat}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-4 shrink-0">
-                <div className="text-right font-mono">
-                  <div className="text-base font-bold text-violet-800">{item.silencePeriodHours} hrs</div>
-                  <div className="text-[10px] text-warm-500">{item.observedAlertsPeriod} of {item.expectedAlertsPerDay} exp/day</div>
-                </div>
-
-                <div className="space-y-1 text-right">
-                  <span
-                    className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                      item.confirmationStatus === 'Confirmed Ingestion Failure'
-                        ? 'bg-orange-50 text-orange-700 border border-orange-200'
-                        : item.confirmationStatus === 'Unexplained Low Activity'
-                        ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                        : 'bg-warm-100 text-warm-700 border border-warm-200'
-                    }`}
-                  >
-                    {item.confirmationStatus}
-                  </span>
-                  <div>
-                    <Link
-                      href={`/entities/${item.entityCode}`}
-                      className="text-[11px] text-emerald-700 hover:underline inline-flex items-center space-x-1"
-                    >
-                      <span>Entity Dossier</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs text-left">
+            <thead>
+              <tr className="border-b border-warm-200 text-[10px] font-mono uppercase text-warm-500 bg-warm-50/70">
+                <th className="py-2.5 px-3">Asset</th>
+                <th className="py-2.5 px-3">Entity</th>
+                <th className="py-2.5 px-3">Expected Activity</th>
+                <th className="py-2.5 px-3">Observed Activity</th>
+                <th className="py-2.5 px-3">Silence Duration</th>
+                <th className="py-2.5 px-3">Risk</th>
+                <th className="py-2.5 px-3">Evidence</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-warm-100 font-mono">
+              {filteredItems.map((item) => {
+                const isHighRisk = item.silencePeriodHours > 24 || item.observedAlertsPeriod === 0;
+                return (
+                  <tr key={item.id} className="hover:bg-warm-50/70 transition-colors">
+                    <td className="py-3 px-3">
+                      <span className="font-bold text-warm-900 block">{item.assetId}</span>
+                      <span className="text-[11px] text-warm-500 font-sans truncate max-w-[200px] block">{item.assetName}</span>
+                    </td>
+                    <td className="py-3 px-3 font-semibold text-warm-800 font-sans">
+                      <Link href={`/entities/${item.entityCode.toLowerCase().replace(' ', '-')}`} className="hover:underline">
+                        {item.entityCode}
+                      </Link>
+                    </td>
+                    <td className="py-3 px-3 text-warm-700">
+                      {item.assetId === 'PAYMENT-DB-01' ? '40–70 alerts/wk' : item.assetId === 'WEB-GATEWAY-02' ? '20–40 alerts/wk' : `${item.expectedAlertsPerDay * 7} alerts/wk`}
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className={`font-bold ${item.observedAlertsPeriod === 0 ? 'text-orange-700' : 'text-amber-700'}`}>
+                        {item.observedAlertsPeriod === 0 ? '0 (Complete Void)' : `${item.observedAlertsPeriod} events`}
+                      </span>
+                    </td>
+                    <td className="py-3 px-3">
+                      <span className="font-bold text-violet-800">
+                        {item.silencePeriodHours >= 24 ? `${Math.round(item.silencePeriodHours / 24)} days` : `${item.silencePeriodHours} hrs`}
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 font-sans">
+                      <span
+                        className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                          isHighRisk
+                            ? 'bg-orange-100 text-orange-800 border border-orange-200'
+                            : 'bg-amber-100 text-amber-800 border border-amber-200'
+                        }`}
+                      >
+                        {isHighRisk ? 'HIGH' : 'MEDIUM'}
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 font-sans">
+                      <Link
+                        href="/findings/F-1024"
+                        className="px-2 py-1 bg-warm-100 hover:bg-warm-200 text-warm-800 rounded font-semibold text-[11px] transition border border-warm-200"
+                      >
+                        View Evidence
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

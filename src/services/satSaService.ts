@@ -8,7 +8,10 @@ import {
   DataQualityRecord,
   EvidenceIntegrityBatch,
   AuditEvent,
-  FindingStatus
+  FindingStatus,
+  CapabilityIndicator,
+  ExecutionGapSignal,
+  ReviewQueueItem
 } from '../types/sat-sa';
 import {
   ENTITIES,
@@ -22,17 +25,28 @@ import {
   INTEGRITY_BATCHES,
   AUDIT_EVENTS,
   DASHBOARD_TRENDS,
-  CATEGORY_DISTRIBUTION
+  CATEGORY_DISTRIBUTION,
+  CAPABILITY_INDICATORS_CSE_ALPHA,
+  EXECUTION_GAP_SIGNALS_CSE_ALPHA,
+  REVIEW_QUEUE_ITEMS
 } from '../data/mockSatSaData';
 
-// In-memory writable state for functional interactions in the UI
 let liveFindings: Finding[] = [...FINDINGS];
 let liveEntities: EntitySummary[] = [...ENTITIES];
 let liveReviewSamples: ReviewSampleItem[] = [...REVIEW_SAMPLES];
 let liveAuditEvents: AuditEvent[] = [...AUDIT_EVENTS];
 
+export const ANALYSIS_STEPS = [
+  'Data ingested across 5 CSE entities',
+  'Data quality validated (94% confidence score)',
+  'Local evidence ledger created with SHA-256 Merkle root',
+  'Execution gaps analysed (rapid closure & low escalation)',
+  'Negative space analysed (silent asset void detected)',
+  'Peer benchmark completed against national baseline',
+  'Findings generated (37 findings, 8 high priority)'
+];
+
 export const satSaService = {
-  // 1. Dashboard Metrics
   async getDashboardSummary() {
     const totalEntities = liveEntities.length;
     const totalRecords = liveEntities.reduce((acc, curr) => acc + curr.evidenceMetrics.rawEventsIngested, 0);
@@ -58,7 +72,6 @@ export const satSaService = {
     };
   },
 
-  // 2. Entity Listing & Detail
   async getEntities(): Promise<EntitySummary[]> {
     return [...liveEntities];
   },
@@ -67,7 +80,6 @@ export const satSaService = {
     return liveEntities.find(e => e.id === id || e.code === id);
   },
 
-  // 3. Findings Listing & Detail
   async getFindings(): Promise<Finding[]> {
     return [...liveFindings];
   },
@@ -88,7 +100,6 @@ export const satSaService = {
 
     liveFindings[index] = updated;
 
-    // Append to audit log
     const now = new Date();
     const formattedDate = `${now.toISOString().split('T')[0]} ${now.toTimeString().split(' ')[0]} IST`;
     const newAudit: AuditEvent = {
@@ -106,17 +117,14 @@ export const satSaService = {
     return updated;
   },
 
-  // 4. Negative Space Radar
   async getNegativeSpaceItems(): Promise<NegativeSpaceItem[]> {
     return [...NEGATIVE_SPACE_ITEMS];
   },
 
-  // 5. Peer Benchmarks
   async getPeerBenchmarks(): Promise<PeerBenchmarkMetric[]> {
     return [...PEER_BENCHMARKS];
   },
 
-  // 6. Evidence Explorer
   async getEvidenceRecords(): Promise<EvidenceRecord[]> {
     return [...EVIDENCE_RECORDS];
   },
@@ -125,7 +133,6 @@ export const satSaService = {
     return EVIDENCE_RECORDS.find(e => e.id === id);
   },
 
-  // 7. Review Planning
   async getReviewSamples(): Promise<ReviewSampleItem[]> {
     return [...liveReviewSamples];
   },
@@ -137,7 +144,6 @@ export const satSaService = {
     return { ...item };
   },
 
-  // 8. Data Quality Reports
   async getDataQualitySummary() {
     return {
       metrics: DATA_QUALITY_METRICS,
@@ -145,13 +151,48 @@ export const satSaService = {
     };
   },
 
-  // 9. Integrity Verification
   async getIntegrityBatches(): Promise<EvidenceIntegrityBatch[]> {
     return [...INTEGRITY_BATCHES];
   },
 
-  // 10. Audit Events
   async getAuditEvents(): Promise<AuditEvent[]> {
     return [...liveAuditEvents];
+  },
+
+  async getCapabilityIndicators(entityId: string): Promise<CapabilityIndicator[]> {
+    return [...CAPABILITY_INDICATORS_CSE_ALPHA];
+  },
+
+  async getExecutionGapSignals(entityId: string): Promise<ExecutionGapSignal[]> {
+    return [...EXECUTION_GAP_SIGNALS_CSE_ALPHA];
+  },
+
+  async getReviewQueueItems(): Promise<ReviewQueueItem[]> {
+    return [...REVIEW_QUEUE_ITEMS];
+  },
+
+  async runAnalysis(onStep?: (stepIndex: number, stepText: string) => void): Promise<{ success: boolean; message: string }> {
+    for (let i = 0; i < ANALYSIS_STEPS.length; i++) {
+      if (onStep) {
+        onStep(i, ANALYSIS_STEPS[i]);
+      }
+      await new Promise(r => setTimeout(r, 650));
+    }
+    const now = new Date();
+    const formatted = `${now.toISOString().split('T')[0]} ${now.toTimeString().split(' ')[0]} IST`;
+    liveAuditEvents = [
+      {
+        id: `AUD-ANL-${Math.floor(1000 + Math.random() * 9000)}`,
+        timestamp: formatted,
+        actor: 'Interactive Analysis Runner',
+        actorRole: 'Examiner Initiated',
+        eventType: 'Assessment Generated',
+        targetRecord: 'Claim-vs-Reality Multi-Lens Pipeline',
+        entityCode: 'ALL',
+        result: 'Full analytical rerun completed: 37 findings, 8 high priority verified.'
+      },
+      ...liveAuditEvents
+    ];
+    return { success: true, message: 'Analysis complete across all lenses.' };
   }
 };

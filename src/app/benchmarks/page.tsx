@@ -141,6 +141,110 @@ export default function PeerBenchmarkPage() {
         </div>
       )}
 
+      {/* Primary Demonstration: CSE Alpha vs Peer Group (Section 14) */}
+      <div className="bg-white p-6 rounded-2xl border border-warm-200 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-warm-100 pb-3">
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                Core Supervisory Finding Context
+              </span>
+              <span className="text-[10px] font-mono bg-warm-100 text-warm-700 px-2 py-0.5 rounded">
+                Ref: F-1024
+              </span>
+            </div>
+            <h2 className="text-base font-bold text-warm-900 mt-1 font-serif">
+              CSE Alpha vs. National Peer Group Baseline
+            </h2>
+            <p className="text-xs text-warm-500 mt-0.5">
+              Empirical distribution of key operational indicators against verified sectoral baseline percentiles.
+            </p>
+          </div>
+          <Link
+            href="/findings/F-1024"
+            className="px-3 py-1.5 rounded-xl bg-warm-900 hover:bg-warm-800 text-warm-50 text-xs font-semibold flex items-center space-x-1.5 transition self-start sm:self-auto"
+          >
+            <span>View Finding F-1024</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs text-left">
+            <thead>
+              <tr className="border-b border-warm-200 text-[10px] font-mono uppercase text-warm-500 bg-warm-50/70">
+                <th className="py-2.5 px-3">Metric</th>
+                <th className="py-2.5 px-3">CSE Alpha</th>
+                <th className="py-2.5 px-3">Peer Median</th>
+                <th className="py-2.5 px-3">Peer Range (IQR)</th>
+                <th className="py-2.5 px-3">Supervisory Observation</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-warm-100 font-mono">
+              <tr className="hover:bg-warm-50/60 transition-colors">
+                <td className="py-3 px-3 font-semibold text-warm-900 font-sans">Critical Closure Time</td>
+                <td className="py-3 px-3 font-bold text-orange-700 text-sm">3 min</td>
+                <td className="py-3 px-3 text-warm-700">47 min</td>
+                <td className="py-3 px-3 text-warm-500">22 – 81 min</td>
+                <td className="py-3 px-3 font-sans">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-orange-50 text-orange-800 border border-orange-200">
+                    Significantly below peer baseline (-93.6%)
+                  </span>
+                </td>
+              </tr>
+              <tr className="hover:bg-warm-50/60 transition-colors">
+                <td className="py-3 px-3 font-semibold text-warm-900 font-sans">Escalation Rate</td>
+                <td className="py-3 px-3 font-bold text-orange-700 text-sm">1.8%</td>
+                <td className="py-3 px-3 text-warm-700">14.2%</td>
+                <td className="py-3 px-3 text-warm-500">9.0 – 24.0%</td>
+                <td className="py-3 px-3 font-sans">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-orange-50 text-orange-800 border border-orange-200">
+                    Significantly below peer baseline (-87.3%)
+                  </span>
+                </td>
+              </tr>
+              <tr className="hover:bg-warm-50/60 transition-colors">
+                <td className="py-3 px-3 font-semibold text-warm-900 font-sans">Investigation Depth</td>
+                <td className="py-3 px-3 font-bold text-amber-700 text-sm">48 chars</td>
+                <td className="py-3 px-3 text-warm-700">420 chars</td>
+                <td className="py-3 px-3 text-warm-500">180 – 650 chars</td>
+                <td className="py-3 px-3 font-sans">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                    Below peer baseline (Template patterns)
+                  </span>
+                </td>
+              </tr>
+              <tr className="hover:bg-warm-50/60 transition-colors">
+                <td className="py-3 px-3 font-semibold text-warm-900 font-sans">Alert Volume</td>
+                <td className="py-3 px-3 font-bold text-emerald-700 text-sm">4,210 / wk</td>
+                <td className="py-3 px-3 text-warm-700">3,920 / wk</td>
+                <td className="py-3 px-3 text-warm-500">2,400 – 5,800 / wk</td>
+                <td className="py-3 px-3 font-sans">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Within normal range
+                  </span>
+                </td>
+              </tr>
+              <tr className="hover:bg-warm-50/60 transition-colors">
+                <td className="py-3 px-3 font-semibold text-warm-900 font-sans">Remediation Rate</td>
+                <td className="py-3 px-3 font-bold text-orange-700 text-sm">12%</td>
+                <td className="py-3 px-3 text-warm-700">78%</td>
+                <td className="py-3 px-3 text-warm-500">55 – 92%</td>
+                <td className="py-3 px-3 font-sans">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-orange-50 text-orange-800 border border-orange-200">
+                    Significantly below peer baseline
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="p-3 bg-warm-50 rounded-xl border border-warm-200 text-[11px] text-warm-600 leading-relaxed">
+          <span className="font-semibold text-warm-900">Examiner Context:</span> Deviations from baseline percentiles represent statistical dissonance between reported compliance and observed telemetry. They do not constitute autonomous proof of non-compliance, but serve as structured guidance for targeted examiner inquiries.
+        </div>
+      </div>
+
       {/* Head-to-Head Entity Comparator */}
       <div className="bg-white p-5 rounded-2xl border border-warm-200 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-warm-100 pb-3">

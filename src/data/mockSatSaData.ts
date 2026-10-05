@@ -7,39 +7,230 @@ import {
   ReviewSampleItem,
   DataQualityRecord,
   EvidenceIntegrityBatch,
-  AuditEvent
+  AuditEvent,
+  CapabilityIndicator,
+  ExecutionGapSignal,
+  ReviewQueueItem
 } from '../types/sat-sa';
+
+export const CAPABILITY_INDICATORS_CSE_ALPHA: CapabilityIndicator[] = [
+  { name: 'Threat Detection', score: 81, benchmarkAverage: 78, status: 'Healthy', description: 'Core correlation and signature coverage is operational across perimeter nodes.' },
+  { name: 'Investigation', score: 58, benchmarkAverage: 76, status: 'Review Recommended', description: 'Unusually high note similarity (84% template match) and brief dwell duration (median 3 min).' },
+  { name: 'Escalation', score: 52, benchmarkAverage: 74, status: 'Review Recommended', description: 'Escalation rate of 1.8% is significantly lower than peer baseline of 14.2%.' },
+  { name: 'Incident Response', score: 64, benchmarkAverage: 75, status: 'Review Recommended', description: 'Critical alert containment claimed but downstream verification artifacts are sparse.' },
+  { name: 'Security Operations', score: 76, benchmarkAverage: 79, status: 'Healthy', description: '24/7 continuous shift staffing and raw ingestion throughput meet standard criteria.' },
+  { name: 'Governance & Oversight', score: 79, benchmarkAverage: 80, status: 'Healthy', description: 'Quarterly compliance and executive review attestations submitted on schedule.' },
+  { name: 'Operational Discipline', score: 61, benchmarkAverage: 77, status: 'Review Recommended', description: 'Batch closures clustered near shift boundaries indicate quota-clearing patterns.' },
+  { name: 'Cyber Resilience', score: 74, benchmarkAverage: 75, status: 'Healthy', description: 'Secondary backup pipelines and redundant monitoring nodes active.' }
+];
+
+export const EXECUTION_GAP_SIGNALS_CSE_ALPHA: ExecutionGapSignal[] = [
+  {
+    signal: 'Fast High-Severity Closure',
+    description: 'Critical cases are being closed much faster than peer baseline.',
+    observedValue: '3 min median',
+    peerBaseline: '47 min median',
+    difference: '-93.6%',
+    confidence: 91,
+    evidenceCount: 184
+  },
+  {
+    signal: 'Critical Without Escalation',
+    description: 'Critical alerts reached closure without expected escalation evidence.',
+    observedValue: '1.2% escalated',
+    peerBaseline: '14.8% escalated',
+    difference: '-91.9%',
+    confidence: 93,
+    evidenceCount: 92
+  },
+  {
+    signal: 'Shallow Investigation',
+    description: 'Investigation records exist but show limited operational activity.',
+    observedValue: '48 chars/note',
+    peerBaseline: '420 chars/note',
+    difference: '-88.6%',
+    confidence: 89,
+    evidenceCount: 114
+  },
+  {
+    signal: 'Recurrence Without Remediation',
+    description: 'Repeated alerts exist without corresponding remediation evidence.',
+    observedValue: '68% recurrence',
+    peerBaseline: '12% recurrence',
+    difference: '+466.0%',
+    confidence: 87,
+    evidenceCount: 64
+  },
+  {
+    signal: 'Template-Driven Investigation',
+    description: 'Investigation notes show unusually high similarity across disparate cases.',
+    observedValue: '84% template match',
+    peerBaseline: '18% template match',
+    difference: '+366.7%',
+    confidence: 92,
+    evidenceCount: 156
+  },
+  {
+    signal: 'Alert-to-Action Dead End',
+    description: 'Expected downstream workflow activity (ticketing, containment, patching) is missing.',
+    observedValue: '71% dead-end rate',
+    peerBaseline: '9% dead-end rate',
+    difference: '+688.9%',
+    confidence: 90,
+    evidenceCount: 88
+  }
+];
 
 export const ENTITIES: EntitySummary[] = [
   {
-    id: 'ent-1',
-    code: 'CSE-17',
-    name: 'Northern Regional Load Despatch Centre (NRLDC)',
+    id: 'cse-alpha',
+    code: 'CSE Alpha',
+    name: 'CSE Alpha (Primary Demonstration Entity)',
+    sector: 'Banking & Finance',
+    tier: 'Tier-1 (National Core)',
+    socType: 'Hybrid Centralized SOC',
+    siemPlatform: 'Splunk Cloud ES v9.2',
+    lastPeriod: 'Q3 2026',
+    reviewStatus: 'Flagged for Escalation',
+    dataQualityScore: 94,
+    reportedKpis: {
+      mttdMinutes: 8,
+      mttrMinutes: 3,
+      dailyAlertVolume: 4210,
+      closureRatePercent: 99.0,
+      falsePositiveRatePercent: 92.4
+    },
+    evidenceMetrics: {
+      rawEventsIngested: 48200,
+      verifiedEvidenceCount: 18,
+      telemetryCompletenessPercent: 78.5,
+      discrepancyIndex: 74
+    },
+    findingCount: 14,
+    criticalFindingCount: 4,
+    negativeSpaceScore: 78,
+    location: 'New Delhi, India',
+    nodalOfficer: 'Shri A. K. Sharma (CISO)'
+  },
+  {
+    id: 'cse-beta',
+    code: 'CSE Beta',
+    name: 'CSE Beta (Power Grid Operations)',
     sector: 'Power & Energy',
     tier: 'Tier-1 (National Core)',
     socType: 'Internal 24/7 SOC',
-    siemPlatform: 'Splunk Enterprise Security v9.2',
+    siemPlatform: 'IBM QRadar v7.5',
     lastPeriod: 'Q3 2026',
-    reviewStatus: 'Flagged for Escalation',
-    dataQualityScore: 84,
+    reviewStatus: 'In Assessment',
+    dataQualityScore: 91,
     reportedKpis: {
       mttdMinutes: 14,
-      mttrMinutes: 38,
-      dailyAlertVolume: 34200,
-      closureRatePercent: 98.4,
-      falsePositiveRatePercent: 91.2
+      mttrMinutes: 42,
+      dailyAlertVolume: 3100,
+      closureRatePercent: 97.4,
+      falsePositiveRatePercent: 89.2
     },
     evidenceMetrics: {
-      rawEventsIngested: 31200000,
-      verifiedEvidenceCount: 8,
-      telemetryCompletenessPercent: 78.5,
-      discrepancyIndex: 68
+      rawEventsIngested: 28400,
+      verifiedEvidenceCount: 9,
+      telemetryCompletenessPercent: 91.0,
+      discrepancyIndex: 38
     },
-    findingCount: 5,
-    criticalFindingCount: 2,
-    negativeSpaceScore: 72,
-    location: 'Katwaria Sarai, New Delhi',
-    nodalOfficer: 'Shri Arvind K. Saxena (CISO)'
+    findingCount: 8,
+    criticalFindingCount: 1,
+    negativeSpaceScore: 32,
+    location: 'Mumbai, Maharashtra',
+    nodalOfficer: 'Dr. S. Nair (Head of SecOps)'
+  },
+  {
+    id: 'cse-gamma',
+    code: 'CSE Gamma',
+    name: 'CSE Gamma (Civil Aviation Radar Feed)',
+    sector: 'Civil Aviation',
+    tier: 'Tier-1 (National Core)',
+    socType: 'Air-Gapped SOC',
+    siemPlatform: 'Elastic Security v8.14',
+    lastPeriod: 'Q3 2026',
+    reviewStatus: 'Pending Review',
+    dataQualityScore: 96,
+    reportedKpis: {
+      mttdMinutes: 18,
+      mttrMinutes: 48,
+      dailyAlertVolume: 1950,
+      closureRatePercent: 96.8,
+      falsePositiveRatePercent: 87.5
+    },
+    evidenceMetrics: {
+      rawEventsIngested: 19800,
+      verifiedEvidenceCount: 6,
+      telemetryCompletenessPercent: 88.5,
+      discrepancyIndex: 26
+    },
+    findingCount: 6,
+    criticalFindingCount: 1,
+    negativeSpaceScore: 41,
+    location: 'Bengaluru, Karnataka',
+    nodalOfficer: 'Capt. R. Deshmukh (Director, Cybersecurity)'
+  },
+  {
+    id: 'cse-delta',
+    code: 'CSE Delta',
+    name: 'CSE Delta (Telecom Core Gateway)',
+    sector: 'Telecom & IT',
+    tier: 'Tier-2 (Critical Sectoral)',
+    socType: 'Managed MSSP SOC',
+    siemPlatform: 'Microsoft Sentinel',
+    lastPeriod: 'Q3 2026',
+    reviewStatus: 'In Assessment',
+    dataQualityScore: 82,
+    reportedKpis: {
+      mttdMinutes: 22,
+      mttrMinutes: 65,
+      dailyAlertVolume: 2200,
+      closureRatePercent: 94.2,
+      falsePositiveRatePercent: 85.0
+    },
+    evidenceMetrics: {
+      rawEventsIngested: 16400,
+      verifiedEvidenceCount: 5,
+      telemetryCompletenessPercent: 68.0,
+      discrepancyIndex: 58
+    },
+    findingCount: 6,
+    criticalFindingCount: 1,
+    negativeSpaceScore: 65,
+    location: 'Hyderabad, Telangana',
+    nodalOfficer: 'Smt. P. Verma (CISO)'
+  },
+  {
+    id: 'cse-epsilon',
+    code: 'CSE Epsilon',
+    name: 'CSE Epsilon (Sovereign Infrastructure)',
+    sector: 'Strategic & Defence',
+    tier: 'Tier-1 (National Core)',
+    socType: 'Air-Gapped Sovereign SOC',
+    siemPlatform: 'Custom In-House SIEM',
+    lastPeriod: 'Q3 2026',
+    reviewStatus: 'Completed',
+    dataQualityScore: 98,
+    reportedKpis: {
+      mttdMinutes: 12,
+      mttrMinutes: 44,
+      dailyAlertVolume: 1420,
+      closureRatePercent: 98.1,
+      falsePositiveRatePercent: 89.0
+    },
+    evidenceMetrics: {
+      rawEventsIngested: 12630,
+      verifiedEvidenceCount: 4,
+      telemetryCompletenessPercent: 98.2,
+      discrepancyIndex: 12
+    },
+    findingCount: 3,
+    criticalFindingCount: 0,
+    negativeSpaceScore: 14,
+    location: 'Chandigarh, India',
+    nodalOfficer: 'Col. V. Mehta (Retd.)'
   },
   {
     id: 'ent-2',
@@ -224,6 +415,215 @@ export const ENTITIES: EntitySummary[] = [
 ];
 
 export const FINDINGS: Finding[] = [
+  {
+    id: 'F-1024',
+    title: 'Potential Claim-vs-Reality Mismatch: Anomalously Rapid Critical Closure',
+    category: 'Execution Gap',
+    priority: 'Critical',
+    entityId: 'cse-alpha',
+    entityCode: 'CSE Alpha',
+    entityName: 'CSE Alpha',
+    sector: 'Banking & Finance',
+    detectionDate: '2026-10-05',
+    confidenceScore: 92,
+    explanation: 'Critical alerts were closed in a median of 3 minutes compared with a peer median of 47 minutes.',
+    patternSummary: 'Underlying operational evidence indicates review-worthy inconsistencies: 99% reported SLA compliance was achieved through automated bulk closures with minimal human investigation and 1.8% escalation rate.',
+    whyFlagged: 'Critical alerts were closed in a median of 3 minutes compared with a peer median of 47 minutes.',
+    supportingEvidenceCount: 18,
+    evidenceIds: ['EVD-9801', 'EVD-9802', 'EVD-9803', 'EVD-9804'],
+    relevantKpiComparison: {
+      reportedValue: '99% Within SLA (98% Closure Compliance)',
+      observedValue: '3 min Median (Peer: 47 min)',
+      varianceLabel: '-93.6% Investigation Dwell Time'
+    },
+    peerContext: {
+      peerAvg: '47 min median',
+      deviationPercent: '-93.6%',
+      contextNote: 'Peers in critical sector maintain an investigation median of 47 min (range 22–81 min) for high-severity cases.'
+    },
+    evidenceStrength: 'Strong',
+    recommendedReviewSteps: [
+      'Inspect analyst workstation logs during high-volume batch intervals.',
+      'Corroborate whether closed critical alerts received triage ticket escalation to Tier-2.',
+      'Interview SOC Lead regarding automated macro usage and triage clearance quotas.'
+    ],
+    status: 'Under Review',
+    auditEvents: ['AUD-005', 'AUD-006'],
+    counterfactual: 'This signal would not trigger if the median critical closure time exceeded 22 minutes, assuming other conditions remain unchanged.',
+    nonAutonomousReason: 'Fast closure may be legitimate (e.g. well-tuned automated orchestration playbooks). SAT-SA therefore presents supporting evidence and recommends examiner review rather than issuing an autonomous verdict.',
+    signalWeights: [
+      { name: 'Fast Closure', weight: 0.20, observedValue: '3 min (vs 47 min peer)', peerBaseline: '47 min', score: 0.94 },
+      { name: 'Low Escalation', weight: 0.20, observedValue: '1.8% (vs 14.2% peer)', peerBaseline: '14.2%', score: 0.88 },
+      { name: 'Repetitive Investigation', weight: 0.20, observedValue: '84% template match', peerBaseline: '18%', score: 0.86 },
+      { name: 'Silent Critical Assets', weight: 0.20, observedValue: 'PAYMENT-DB-01 (47d silent)', peerBaseline: '< 24h', score: 0.85 },
+      { name: 'Missing Remediation', weight: 0.20, observedValue: '68% recurrence without patch', peerBaseline: '12%', score: 0.89 }
+    ],
+    rawRecords: [
+      {
+        record_id: 'ALT-98213',
+        timestamp: '10:03:14 IST',
+        entity_id: 'CSE Alpha',
+        asset_id: 'PAYMENT-GW-01',
+        severity: 'Critical',
+        case_id: 'CAS-4401',
+        workflow_state: 'Closed - Resolved',
+        escalation: 'No',
+        investigation: 'Minimal (42 chars)',
+        remediation: 'None documented',
+        sha256_hash: '8f3a8b27c9e0411a78912d8a56f0c39128f7d934bb7e203498cb0e21a92c0192'
+      },
+      {
+        record_id: 'ALT-98219',
+        timestamp: '11:12:02 IST',
+        entity_id: 'CSE Alpha',
+        asset_id: 'CORE-SWITCH-02',
+        severity: 'Critical',
+        case_id: 'CAS-4408',
+        workflow_state: 'Closed - False Positive',
+        escalation: 'No',
+        investigation: 'Minimal (38 chars)',
+        remediation: 'None documented',
+        sha256_hash: '3d91f28b7e40a12c890123ef4567890abcdef1234567890abcdef1234567890a'
+      },
+      {
+        record_id: 'ALT-98224',
+        timestamp: '12:45:30 IST',
+        entity_id: 'CSE Alpha',
+        asset_id: 'DB-REPLICA-03',
+        severity: 'Critical',
+        case_id: 'CAS-4415',
+        workflow_state: 'Closed - Resolved',
+        escalation: 'No',
+        investigation: 'Minimal (45 chars)',
+        remediation: 'None documented',
+        sha256_hash: '7b82f041b3c99021487ea310f82531cd89912a74c6e93014f31c201891de1204'
+      },
+      {
+        record_id: 'ALT-98231',
+        timestamp: '14:18:44 IST',
+        entity_id: 'CSE Alpha',
+        asset_id: 'HSM-AUTH-01',
+        severity: 'Critical',
+        case_id: 'CAS-4422',
+        workflow_state: 'Closed - Suppressed',
+        escalation: 'No',
+        investigation: 'Minimal (51 chars)',
+        remediation: 'None documented',
+        sha256_hash: '5a41c2e98710fa4312de8901bcae5678901234567890abcdef1234567890abcd'
+      }
+    ],
+    evidenceLedger: {
+      recordHash: '8f3a8b27c9e0411a78912d8a56f0c39128f7d934bb7e203498cb0e21a92c0192',
+      merkleRoot: '7b82f041b3c99021487ea310f82531cd89912a74c6e93014f31c201891de1204',
+      previousBatchHash: '4c1a792df91024bc68102a39158c301bbfa931045e72fb418902cfa0184b9102',
+      verificationStatus: 'Cryptographically verified'
+    }
+  },
+  {
+    id: 'F-1027',
+    title: 'Silent Critical Asset: Complete Telemetry Void on Crown Jewel PAYMENT-DB-01',
+    category: 'Negative Space',
+    priority: 'Critical',
+    entityId: 'cse-alpha',
+    entityCode: 'CSE Alpha',
+    entityName: 'CSE Alpha',
+    sector: 'Banking & Finance',
+    detectionDate: '2026-10-04',
+    confidenceScore: 89,
+    explanation: 'PAYMENT-DB-01 has produced zero security events for 47 consecutive days while peer baseline activity is 40–70 alerts/week.',
+    patternSummary: 'Sensor telemetry deadman check triggered. No heartbeat or query telemetry forwarded to SIEM aggregator.',
+    whyFlagged: 'Critical Tier-1 database completely silent for 47 days.',
+    supportingEvidenceCount: 7,
+    evidenceIds: ['EVD-9804'],
+    relevantKpiComparison: {
+      reportedValue: '100% Ingest Health Claimed',
+      observedValue: '0 Events for 47 Days',
+      varianceLabel: 'Complete Ingestion Void'
+    },
+    peerContext: {
+      peerAvg: '40–70 alerts/week',
+      deviationPercent: '-100.0%',
+      contextNote: 'Core database servers in peer banking infrastructure generate regular baseline audit telemetry.'
+    },
+    evidenceStrength: 'Strong',
+    recommendedReviewSteps: [
+      'Verify physical agent connector daemon on PAYMENT-DB-01.',
+      'Check local audit backlog buffers on host.',
+      'Issue inquiry on unrecorded maintenance or firewall port isolation.'
+    ],
+    status: 'Under Review',
+    auditEvents: ['AUD-002']
+  },
+  {
+    id: 'F-1031',
+    title: 'Template-Driven Investigations: High Boilerplate Frequency',
+    category: 'Execution Gap',
+    priority: 'High',
+    entityId: 'cse-beta',
+    entityCode: 'CSE Beta',
+    entityName: 'CSE Beta',
+    sector: 'Power & Energy',
+    detectionDate: '2026-10-03',
+    confidenceScore: 84,
+    explanation: 'Investigation notes across 43 independent case files exhibit 84% string similarity with identical 2-line resolution comments.',
+    patternSummary: 'String entropy calculation identified verbatim copy-pasting of resolution templates across distinct substation alert clusters.',
+    whyFlagged: 'Template-driven investigations indicate quota clearing without substantive triage.',
+    supportingEvidenceCount: 43,
+    evidenceIds: ['EVD-9802'],
+    relevantKpiComparison: {
+      reportedValue: '42 min MTTR Reported',
+      observedValue: '84% Template Similarity',
+      varianceLabel: 'Repetitive Investigation Notes'
+    },
+    peerContext: {
+      peerAvg: '18% template similarity',
+      deviationPercent: '+366.7%',
+      contextNote: 'Sector baseline indicates individualized analyst notes with unique artifact references.'
+    },
+    evidenceStrength: 'Moderate',
+    recommendedReviewSteps: [
+      'Sample 15 case files with identical investigation comments.',
+      'Corroborate whether IP addresses investigated matched ticket notes.',
+      'Review analyst training and shift quota pressure.'
+    ],
+    status: 'Under Review',
+    auditEvents: ['AUD-001']
+  },
+  {
+    id: 'F-1038',
+    title: 'Missing Alert Category: Zero Credential Dumping & Kerberoasting Signals',
+    category: 'Negative Space',
+    priority: 'Medium',
+    entityId: 'cse-gamma',
+    entityCode: 'CSE Gamma',
+    entityName: 'CSE Gamma',
+    sector: 'Civil Aviation',
+    detectionDate: '2026-10-02',
+    confidenceScore: 81,
+    explanation: 'Expected identity threat detection rules have produced zero events in 90 days despite 2,400 active domain accounts.',
+    patternSummary: 'Sectoral baseline models expect 12-25 Kerberoasting or pass-the-hash telemetry events per quarter in enterprise AD environments.',
+    whyFlagged: 'Missing identity attack detection telemetry compared to peer entities.',
+    supportingEvidenceCount: 12,
+    evidenceIds: ['EVD-9803'],
+    relevantKpiComparison: {
+      reportedValue: 'Full ATT&CK Matrix Covered',
+      observedValue: 'Zero Identity Detections',
+      varianceLabel: 'Credential Telemetry Void'
+    },
+    peerContext: {
+      peerAvg: '18.4 detections/quarter',
+      deviationPercent: '-100.0%',
+      contextNote: 'All peer airports and aviation centers observe periodic AD service ticket queries.'
+    },
+    evidenceStrength: 'Moderate',
+    recommendedReviewSteps: [
+      'Inspect Windows Event Log forwarding for Event IDs 4768 and 4769.',
+      'Check Domain Controller agent status.',
+      'Verify SIEM rule mapping for MITRE ATT&CK T1558.'
+    ],
+    status: 'Under Review',
+    auditEvents: ['AUD-004']
+  },
   {
     id: 'FND-2026-104',
     title: 'Anomalous Rapid Alert Closure During Off-Hours Shift Handover',
@@ -453,6 +853,70 @@ export const FINDINGS: Finding[] = [
 ];
 
 export const NEGATIVE_SPACE_ITEMS: NegativeSpaceItem[] = [
+  {
+    id: 'NEG-101',
+    assetId: 'PAYMENT-DB-01',
+    assetName: 'Crown Jewel Transaction Settlement Database (PAYMENT-DB-01)',
+    entityCode: 'CSE Alpha',
+    entityName: 'CSE Alpha',
+    sector: 'Banking & Finance',
+    criticality: 'Crown Jewel Asset',
+    silencePeriodHours: 1128.0, // 47 days
+    expectedAlertsPerDay: 8, // 40-70 per week
+    observedAlertsPeriod: 0,
+    anomalyType: 'Unexplained Telemetry Silence',
+    confirmationStatus: 'Confirmed Ingestion Failure',
+    lastHeartbeat: '2026-08-18 04:12:00 IST',
+    potentialRootCause: 'Complete ingestion void: Expected 40–70 alerts/week, observed 0 for 47 consecutive days. Risk: HIGH.'
+  },
+  {
+    id: 'NEG-102',
+    assetId: 'WEB-GATEWAY-02',
+    assetName: 'Core Perimeter Application Proxy (WEB-GATEWAY-02)',
+    entityCode: 'CSE Alpha',
+    entityName: 'CSE Alpha',
+    sector: 'Banking & Finance',
+    criticality: 'Core Industrial Gateway',
+    silencePeriodHours: 36.0,
+    expectedAlertsPerDay: 4, // 20-40 per week
+    observedAlertsPeriod: 2,
+    anomalyType: 'Off-Hours Activity Cliff',
+    confirmationStatus: 'Unexplained Low Activity',
+    lastHeartbeat: '2026-10-04 11:20:00 IST',
+    potentialRootCause: 'Expected 20–40 alerts/week, observed only 2. Silence anomaly during peak inbound traffic. Risk: HIGH.'
+  },
+  {
+    id: 'NEG-103',
+    assetId: 'SWIFT-CONNECTOR-04',
+    assetName: 'Inter-Bank Financial Messaging Node (SWIFT-04)',
+    entityCode: 'CSE Beta',
+    entityName: 'CSE Beta',
+    sector: 'Power & Energy',
+    criticality: 'Crown Jewel Asset',
+    silencePeriodHours: 528.0, // 22 days
+    expectedAlertsPerDay: 3, // 15-30 per week
+    observedAlertsPeriod: 0,
+    anomalyType: 'Unexplained Telemetry Silence',
+    confirmationStatus: 'Under Investigation',
+    lastHeartbeat: '2026-09-12 18:00:00 IST',
+    potentialRootCause: 'Expected 15–30 alerts/week, observed 0. Silence for 22 days. Risk: HIGH.'
+  },
+  {
+    id: 'NEG-104',
+    assetId: 'AUTH-CLUSTER-01',
+    assetName: 'RADIUS & Kerberos Single-Sign-On Cluster (AUTH-01)',
+    entityCode: 'CSE Delta',
+    entityName: 'CSE Delta',
+    sector: 'Telecom & IT',
+    criticality: 'Production Switch',
+    silencePeriodHours: 18.0,
+    expectedAlertsPerDay: 15, // 80-120 per week
+    observedAlertsPeriod: 14,
+    anomalyType: 'Missing Alert Category',
+    confirmationStatus: 'Unexplained Low Activity',
+    lastHeartbeat: '2026-10-04 14:10:00 IST',
+    potentialRootCause: 'Expected 80–120 alerts/week, observed 14. Silence anomaly on authentication failure events. Risk: MEDIUM.'
+  },
   {
     id: 'NEG-01',
     assetId: 'GW-NRLDC-400KV',
@@ -929,6 +1393,66 @@ export const INTEGRITY_BATCHES: EvidenceIntegrityBatch[] = [
 
 export const AUDIT_EVENTS: AuditEvent[] = [
   {
+    id: 'AUD-0837',
+    timestamp: '2026-10-05 08:37:12 IST',
+    actor: 'R. Rao (Dy. Director, NCIIPC)',
+    actorRole: 'Lead Examiner',
+    eventType: 'Evidence Viewed',
+    targetRecord: 'F-1024 (Claim-vs-Reality Mismatch)',
+    entityCode: 'CSE Alpha',
+    result: 'Examiner opened finding F-1024 and reviewed 4 cross-signal evidence items.'
+  },
+  {
+    id: 'AUD-0836',
+    timestamp: '2026-10-05 08:36:04 IST',
+    actor: 'Evidence Fusion Engine',
+    actorRole: 'System Daemon',
+    eventType: 'Finding Created',
+    targetRecord: 'F-1024 (Rapid Critical Alert Closure)',
+    entityCode: 'CSE Alpha',
+    result: 'Weighted signal fusion score 0.88 triggered finding F-1024 for human supervisory review.'
+  },
+  {
+    id: 'AUD-0835',
+    timestamp: '2026-10-05 08:35:10 IST',
+    actor: 'Supervisory Analytics Engine',
+    actorRole: 'System Daemon',
+    eventType: 'Assessment Generated',
+    targetRecord: 'Execution Gap & Negative Space Multi-Lens Pipeline',
+    entityCode: 'ALL',
+    result: 'Analytics completed across 125,430 records for 5 strategic CSE entities.'
+  },
+  {
+    id: 'AUD-0834',
+    timestamp: '2026-10-05 08:34:25 IST',
+    actor: 'Local Cryptographic Ledger Daemon',
+    actorRole: 'Integrity Verifier',
+    eventType: 'Integrity Verification Performed',
+    targetRecord: 'BTH-2026-10-W1-ALPHA (Merkle Root Sealed)',
+    entityCode: 'CSE Alpha',
+    result: 'Evidence ledger generated: 184 SHA-256 record hashes anchored to Merkle root 7b82...91de.'
+  },
+  {
+    id: 'AUD-0833',
+    timestamp: '2026-10-05 08:33:02 IST',
+    actor: 'Data Quality Service',
+    actorRole: 'ETL Pipeline',
+    eventType: 'Validation Completed',
+    targetRecord: 'Schema, Density, and Timestamp Skew Analyzer',
+    entityCode: 'ALL',
+    result: 'Data quality validation completed: 94% composite confidence score (Completeness 97%, Consistency 93%).'
+  },
+  {
+    id: 'AUD-0832',
+    timestamp: '2026-10-05 08:32:00 IST',
+    actor: 'Data Ingestion Service',
+    actorRole: 'ETL Pipeline',
+    eventType: 'Data Import',
+    targetRecord: 'INGEST-2026-Q3-CSE-MULTI',
+    entityCode: 'ALL',
+    result: 'Dataset imported: 125,430 records across 5 CSEs ingested with multi-format validation.'
+  },
+  {
     id: 'AUD-001',
     timestamp: '2026-10-04 19:45:12 IST',
     actor: 'R. Rao (Dy. Director, NCIIPC)',
@@ -1017,4 +1541,90 @@ export const CATEGORY_DISTRIBUTION = [
   { name: 'Goodhart Lens', count: 3, color: '#C2410C' }, // Warm Rust
   { name: 'Data Quality', count: 4, color: '#57534E' }, // Warm Charcoal
   { name: 'Evidence Integrity', count: 3, color: '#9333EA' } // Violet
+];
+
+export const REVIEW_QUEUE_ITEMS: ReviewQueueItem[] = [
+  {
+    id: 'RQ-101',
+    priority: 'HIGH',
+    findingId: 'F-1024',
+    findingTitle: 'Fast Critical Alert Closure Without Escalation',
+    entity: 'CSE Alpha',
+    entityId: 'cse-alpha',
+    reason: 'Critical alerts resolved in 3 min median vs peer median 47 min (-93.6% gap). 0% escalation to Tier-2 despite critical severity tag.',
+    evidence: '184 records (ALT-98213, ALT-98219, ALT-98224, etc.)',
+    suggestedAction: 'Request analyst terminal logs for 10:03-10:06 IST & inspect Tier-1 automated closing scripts.',
+    peerContext: 'National peer median is 47 min with 14.2% escalation rate. CSE Alpha is in the bottom 1st percentile.',
+    suggestedQuestions: [
+      'What automated tool or script was executing under Analyst ID A-14 at 10:03–10:06 IST when multiple critical alerts were closed in under 3 minutes?',
+      'Why was there zero escalation to Tier-2 incident response leads despite active Trojan/C2 payload indicators in signature ALT-98213?',
+      'Has automated alert suppression been configured to artificially satisfy statutory MTTR metrics?',
+      'Can the SOC produce forensic screen recordings or analyst terminal command-line logs corresponding to these closure timestamps?'
+    ]
+  },
+  {
+    id: 'RQ-102',
+    priority: 'HIGH',
+    findingId: 'F-1027',
+    findingTitle: 'Prolonged Telemetry Silence on Critical Asset',
+    entity: 'CSE Alpha',
+    entityId: 'cse-alpha',
+    reason: 'Zero alert telemetry received from PAYMENT-DB-01 across 47 consecutive days against an expected baseline of 40–70 alerts/week.',
+    evidence: '7 periodic health heartbeats, 0 operational alerts',
+    suggestedAction: 'Verify log forwarder agent status on PAYMENT-DB-01 and inspect SIEM ingestion pipeline filters.',
+    peerContext: 'Comparable banking/payment database clusters across 4 peers maintain steady 45–65 alerts/week telemetry.',
+    suggestedQuestions: [
+      'When was the log forwarder daemon on PAYMENT-DB-01 last reconfigured or updated?',
+      'Were any syslog suppression or regex exclusion filters applied at the syslog collector or SIEM forwarder level?',
+      'Can the entity demonstrate live test alert generation from PAYMENT-DB-01 to confirm pipeline continuity?'
+    ]
+  },
+  {
+    id: 'RQ-103',
+    priority: 'MEDIUM',
+    findingId: 'F-1031',
+    findingTitle: 'Template-Driven Repetitive Investigation Notes',
+    entity: 'CSE Beta',
+    entityId: 'cse-beta',
+    reason: 'Cosine similarity of 84% across 43 critical case notes. Identical boilerplate text used across distinct threat classifications.',
+    evidence: '43 case files sharing identical 14-word closing comments',
+    suggestedAction: 'Audit SOC standard operating procedure on case disposition and investigate copy-paste habits.',
+    peerContext: 'Peer investigation note semantic similarity averages 0.28, reflecting customized analytical investigations.',
+    suggestedQuestions: [
+      'Does the SOC ticketing platform utilize automated auto-fill or macro templates for alert disposition?',
+      'Were actual root-cause investigations performed for cases CS-8821 through CS-8864 prior to applying the boilerplate comment?'
+    ]
+  },
+  {
+    id: 'RQ-104',
+    priority: 'MEDIUM',
+    findingId: 'F-1038',
+    findingTitle: 'Total Absence of Ransomware / Lateral Movement Telemetry',
+    entity: 'CSE Delta',
+    entityId: 'cse-delta',
+    reason: 'Zero records generated in Ransomware and Lateral Movement categories for 60+ days despite active Windows Domain Controller infrastructure.',
+    evidence: '12 weekly reporting cycles with 0 events in category',
+    suggestedAction: 'Review endpoint detection rule deployment status and inspect Windows Event ID 4624/4672 collection.',
+    peerContext: 'Peer baseline averages 4.2 low-confidence lateral movement probes per week.',
+    suggestedQuestions: [
+      'Are Sysmon Event ID 1 (Process Creation) and Event ID 3 (Network Connection) active on Domain Controllers?',
+      'Why are lateral movement correlation rules disabled in the active SIEM correlation rule pack?'
+    ]
+  },
+  {
+    id: 'RQ-105',
+    priority: 'LOW',
+    findingId: 'F-1042',
+    findingTitle: 'Shift Handover Latency Spike During Weekend Operations',
+    entity: 'CSE Beta',
+    entityId: 'cse-beta',
+    reason: 'Escalation response latency increases from 14 minutes on weekdays to 184 minutes during Saturday-Sunday shift transition.',
+    evidence: '29 weekend escalation records across the past 4 weekends',
+    suggestedAction: 'Examine weekend staffing schedules and Tier-1 MSSP escalation SLAs.',
+    peerContext: 'Peer weekend escalation variance is within +35% of weekday baseline; CSE Beta exhibits +1,214% variance.',
+    suggestedQuestions: [
+      'Is there physical or remote Tier-2 presence during weekend shift handovers (06:00 and 18:00 IST)?',
+      'What escalation notification mechanism is utilized when on-call Tier-2 personnel are off-site?'
+    ]
+  }
 ];
