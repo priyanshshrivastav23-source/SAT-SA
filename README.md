@@ -1,185 +1,637 @@
-# SAT-SA: Supervisory Analytics Tool for SOC Assessment
+# SAT-SA — Supervisory Analytics Tool for SOC Assessment
 
-**Smart India Hackathon 2026**  
-**Problem Statement:** SIH26157 — NTRO / NCIIPC  
-**Core Concept:** *The Claim-vs-Reality Engine* — *"Do SOC operations match what is reported?"*
+**Smart India Hackathon 2026 · SIH26157**
 
----
+> **Claim-vs-Reality Engine:** Do SOC operations match what is being reported?
 
-## 1. Executive Overview
+## Overview
 
-SAT-SA is an evidence-backed supervisory analytics system designed for **NTRO / NCIIPC** examiners assessing Critical Sector Entity (CSE) Security Operations Centers (SOCs).
+SAT-SA (Supervisory Analytics Tool for SOC Assessment) is an offline-first supervisory analytics platform designed to assist human examiners in assessing Security Operations Centres (SOCs).
 
-### The Core Problem
-A CSE submits quarterly compliance reports displaying healthy top-level KPIs:
-- **Critical Alerts Within SLA:** `99.2%`
-- **Critical Closure Compliance:** `98.4%`
-- **Reported SOC Health:** `Healthy`
+It brings approved SOC assessment records together and performs data-quality checks, normalization, feature engineering, multiple analytical examinations, evidence fusion, and review prioritization.
 
-### The SAT-SA Solution
-SAT-SA inspects the underlying operational telemetry records to uncover discrepancies:
-1. **Unusually Fast Critical Closures:** Median closure time of 3 minutes vs. national peer median of 47 minutes (-93.6% gap).
-2. **Abnormally Low Escalation:** Only 1.8% of critical alerts escalated to Tier-2 vs. 14.2% peer baseline.
-3. **Repetitive Investigation Notes:** 84% template similarity across disparate threat categories.
-4. **Silent Critical Assets:** High-value database clusters (e.g. `PAYMENT-DB-01`) producing 0 alerts across 47 consecutive days.
-5. **Missing Telemetry Categories:** Complete absence of ransomware or lateral movement telemetry.
-6. **Cross-Signal Claim-vs-Reality Concern:** Multiple weak signals fuse into an evidence-backed finding recommending examiner inquiry.
+SAT-SA focuses on the gap between **reported performance** and the **available operational evidence**.
 
-### Critical Design Principle: Examiner Assistance, Not Autonomous Sanctions
-SAT-SA **never** outputs accusatory verdicts like *"Fraud detected"* or *"Guilty"*. It outputs:
-> *"Potential mismatch between reported operational performance and supporting evidence. Review recommended."*
+> SAT-SA identifies evidence-backed signals for human review. It does not autonomously declare fraud, misconduct, or non-compliance.
 
-The tool supports human examiner judgment, making on-site and remote reviews faster, sharper, and evidence-driven.
+All numerical examples used by the demonstration are synthetic.
 
----
+## Problem
 
-## 2. Technology Stack
+SOC assessments can involve large volumes of fragmented information:
 
-- **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS (warm light government theme), Lucide Icons, Framer Motion, Recharts.
-- **Backend:** Python, FastAPI, SQLite / in-memory analytics.
-- **Data & Security:** 100% offline & air-gapped capable; local synthetic SOC dataset; local SHA-256 cryptographic evidence ledger with Merkle root verification.
-- **Zero External API Dependencies:** No external cloud services, OpenAI API, Firebase, or Supabase required.
+- Alerts
+- Incidents and cases
+- Investigations
+- Escalations
+- Asset information
+- Remediation records
+- SLA/KPI reports
+- Analyst activity
+- Investigation notes
+- Telemetry information
 
----
+A conventional dashboard can show what was reported, but an examiner may also need to determine whether the reported metrics are supported by the underlying operational records.
 
-## 3. Installation & Setup
+SAT-SA is designed to help answer:
 
-### Prerequisites
-- Node.js (v18+ or v20+)
-- Python (v3.9+)
+> **Does the available operational evidence support what the SOC reports?**
 
-### Frontend Setup
+## Core Workflow
 
-```bash
-# Clone repository
-git clone https://github.com/priyanshshrivastav23-source/SAT-SA.git
-cd SAT-SA
-
-# Install frontend dependencies
-npm install
-
-# Start development server
-# (Default port 3000, or port 3002 if 3000 is occupied by another application)
-npm run dev -- -p 3002
+```text
+Reported Claim
+      ↓
+Underlying Operational Evidence
+      ↓
+Data Quality & Normalization
+      ↓
+Execution Gap / Negative Space / Peer & Anomaly / Goodhart Analysis
+      ↓
+Evidence Fusion
+      ↓
+Prioritized Review
+      ↓
+Human Examiner Decision
+      ↓
+Report / Audit Trail
 ```
 
-Access the frontend at: `http://localhost:3002` (or `http://localhost:3000`).
+## Key Features
 
-### Backend Setup (FastAPI)
+### Data Ingestion
 
-```bash
-cd backend
+Processes approved local assessment datasets and structured SOC records such as CSV, JSON, XLSX and approved exports.
 
-# Create virtual environment (optional)
-python3 -m venv venv
-source venv/bin/activate
+### Data Quality
 
-# Install dependencies
-pip install -r requirements.txt
+Checks schema, formats, missing values, duplicates, timestamps, identifiers, source completeness and time-window coverage.
 
-# Start FastAPI server
-uvicorn app.main:app --reload --port 8000
+### Normalization
+
+Converts different source formats into a consistent analytical representation.
+
+### Feature Engineering
+
+Derives operational features such as closure duration, escalation rate, investigation duration, workload, SLA duration, asset activity and remediation status.
+
+## Analytical Engines
+
+### 1. Execution Gap Analysis
+
+Compares expected process steps or operational commitments with recorded activities.
+
+Example:
+
+```text
+Alert → Triage → Investigation → Escalation → Resolution → Remediation
 ```
 
-Access API Documentation at: `http://localhost:8000/docs`
+If expected stages are not sufficiently represented in the available evidence, the system can flag them for review.
 
----
+### 2. Negative Space Analysis
 
-## 4. Offline DEMO MODE
+Looks for expected records or activities that appear absent within a defined population and time window.
 
-SAT-SA includes an integrated, zero-latency **DEMO MODE**:
-- When the backend is offline or during an air-gapped presentation, the frontend automatically falls back to local high-fidelity synthetic data.
-- The top-right badge displays `● DEMO MODE`.
-- Clicking **"Run Analysis"** in the top bar launches an interactive 7-stage analytical execution modal:
-  1. *Data ingested across 5 CSE entities*
-  2. *Data quality validated (94% confidence score)*
-  3. *Local evidence ledger created with SHA-256 Merkle root*
-  4. *Execution gaps analysed (rapid closure & low escalation)*
-  5. *Negative space analysed (silent asset void detected)*
-  6. *Peer benchmark completed against national baseline*
-  7. *Findings generated (37 findings, 8 high priority)*
+Examples include:
 
----
+- Silent critical assets
+- Missing telemetry categories
+- Missing escalation records
+- Missing remediation evidence
+- Long activity gaps
 
-## 5. Main Application Structure
+Source completeness and coverage are considered before interpreting absence.
 
-| Route | Page | Purpose |
-|---|---|---|
-| `/dashboard` | **Supervisory Overview** | Top metric cards, Claim-vs-Reality hero card, Priority Findings table. |
-| `/entities` | **Entity Directory** | Multi-CSE directory with supervisory indicators and risk levels. |
-| `/entities/cse-alpha` | **Entity Assessment** | 8 capability indicators, 30-day activity chart with anomaly spike, 6 execution gap cards. |
-| `/findings/F-1024` | **Finding Details** | Why flagged, animated cross-signal reasoning chain, counterfactual, evidence table, SHA-256 ledger. |
-| `/negative-space` | **Negative Space Radar** | Silent critical assets, missing categories, expected vs. observed activity chart. |
-| `/peer-benchmark` | **Peer Benchmark** | CSE Alpha vs. national peer percentiles (closure time, escalation, similarity). |
-| `/review-planner` | **Examiner Review Planner** | 6 sampling cards, review queue, "Generate Review Pack" modal with CISO interview questions. |
-| `/evidence` | **Evidence Repository** | Forensic raw SOC record viewer with SHA-256 verification and statutory 65B notices. |
-| `/audit` | **Supervisory Audit Timeline** | 08:32–08:37 statutory chronology, model/data/rule governance versioning. |
+### 3. Peer & Anomaly Analysis
 
----
+Compares comparable teams, entities, case categories, assets or periods to identify unusual rates, durations or distributions.
 
-## 6. Transparent Heuristic Evidence Fusion
+Peer differences are treated as analytical indicators, not proof of improper activity.
 
-Rather than using an opaque black-box machine learning model for this supervisory MVP, SAT-SA utilizes an explainable, inspectable weighted fusion engine:
+### 4. Goodhart Lens
+
+Examines whether reported KPIs are consistent with the underlying operational evidence.
+
+It can highlight situations such as unusually strong KPI performance combined with weak or inconsistent supporting activity.
+
+## Evidence Fusion
+
+SAT-SA combines related signals instead of relying on a single indicator.
+
+```text
+Fast Closure
+     +
+Low Escalation
+     +
+Repeated Investigation Notes
+     +
+Silent Asset
+     +
+Missing Remediation Evidence
+     ↓
+Evidence Fusion
+     ↓
+Prioritized Review Item
+```
+
+The fusion layer can retain signal type, score, source records, timestamps, data quality, related signals and analytical explanation.
+
+The MVP can use an inspectable weighted approach:
 
 ```python
 WEIGHTS = {
-    "fast_closure": 0.20,              # Discrepancy vs. 47 min peer median
-    "low_escalation": 0.20,            # Discrepancy vs. 14.2% peer baseline
-    "investigation_similarity": 0.20,  # Cosine note similarity (84% vs 28%)
-    "silent_asset": 0.20,              # Telemetry silence on critical assets (47 days)
-    "missing_remediation": 0.20        # Absence of verifiable fix artifacts (88%)
+    "fast_closure": 0.20,
+    "low_escalation": 0.20,
+    "investigation_similarity": 0.20,
+    "silent_asset": 0.20,
+    "missing_remediation": 0.20
 }
 
-composite_score = sum(signals[k] * WEIGHTS[k] for k in WEIGHTS)
-confidence = raw_confidence * (data_confidence / 100.0)
+composite_score = sum(
+    signals[k] * WEIGHTS[k]
+    for k in WEIGHTS
+)
 ```
 
-### Data Confidence Score (94%)
-Evaluates underlying log quality prior to signal fusion:
-- **Completeness:** `97%`
-- **Consistency:** `93%`
-- **Timestamp Integrity:** `92%`
+These weights are demonstration configuration values and should be validated on representative data before operational use.
 
----
+## Human-in-the-Loop
 
-## 7. Local Cryptographic Evidence Ledger
+SAT-SA is a decision-support system.
 
-To comply with the admissibility requirements of **Section 65B of the Indian Evidence Act / IT Act**:
-- Each operational SOC record is hashed with `SHA-256`.
-- Hashes are organized into local batches and sealed with a deterministic `Merkle Root`.
-- Example for Finding F-1024:
-  - **Record ID:** `ALT-98213`
-  - **SHA-256:** `8f3a9d20c5e14b8a221f7e3d1c8b9a4f6e2d1c0b8a7f6e5d4c3b2a1f0e9d8c7b`
-  - **Merkle Root:** `7b82f091de4c5531d2b8e3a092c4b7f8e1a3c5d7e9b0d2f4a6c8e0b2d4f6a8c0`
-  - **Status:** *Cryptographically verified*
+**SAT-SA does:**
 
----
+- Find patterns
+- Connect evidence
+- Explain signals
+- Prioritize review
 
-## 8. 2–3 Minute SIH Demo Walkthrough Script
+**The examiner does:**
 
-1. **Dashboard (`/dashboard`):**
-   - Point out top metric cards: 5 CSEs, 125,430 records, 37 findings, 8 high priority, 94% data confidence.
-   - Show the **Claim vs Reality Hero Card**: Highlight reported 99% SLA compliance vs. observed 3-minute closures and 47-day silent assets.
-2. **Entity Assessment (`/entities/cse-alpha`):**
-   - Click *CSE Alpha* in the Priority Findings table.
-   - Present the **Supervisory Indicator (72/100)** and the 8 capability indicators.
-   - Show the 30-Day Operational Activity chart highlighting the Days 18-22 batch closure anomaly.
-   - Point out the 6 **Execution Gap Signals** (e.g. Fast Closure at -93.6% vs. peer baseline).
-3. **Finding Details (`/findings/F-1024`):**
-   - Click on Finding `F-1024`.
-   - Explain *"Why Was This Flagged?"* (3 min median vs. 47 min peer baseline).
-   - Walk through the **Cross-Signal Reasoning Chain** (`w: 0.20` transparent weights).
-   - Read the **Counterfactual** and *"Why NOT Automatically Classified"* disclaimer.
-   - Click *"View Source Record"* to inspect the raw SOC record.
-   - Click *"Verify Batch Integrity"* on the Local Cryptographic Evidence Ledger.
-4. **Examiner Review Planner (`/review-planner`):**
-   - Navigate to Review Planner.
-   - Review the 6 sampling stratification cards (Total: 125,430, Sample: 120, Control: 20, High priority: 35, Diverse: 45, Critical: 20).
-   - Click **"Generate Review Pack"** to open the on-site inspection docket with suggested CISO interview questions.
+- Review evidence
+- Check context
+- Request additional information
+- Accept or dismiss findings
+- Record observations
+- Make the final assessment
 
----
+The system therefore produces review-oriented statements such as:
 
-## 9. Contributors
+> **Potential mismatch between reported operational performance and supporting evidence. Review recommended.**
 
-- **Yash Barfa** ([@YashBarfa0603](https://github.com/YashBarfa0603))
-- **Priyansh Shrivastav** ([@priyanshshrivastav23-source](https://github.com/priyanshshrivastav23-source))
+It does not automatically output “Fraud Detected”, “Guilty”, or “Misconduct Confirmed”.
+
+## System Architecture
+
+```text
+Approved SOC Data
+       ↓
+Data Ingestion
+       ↓
+Validation & Data Quality
+       ↓
+Normalization & Feature Engineering
+       ↓
+┌────────────┬──────────────┬──────────────┐
+│ Execution  │ Negative     │ Peer/Anomaly │
+│ Gap        │ Space        │ Analysis     │
+└────────────┴──────────────┴──────────────┘
+       ↓
+Goodhart Lens
+       ↓
+Evidence Fusion
+       ↓
+Review Prioritization
+       ↓
+Human Examiner Review
+       ↓
+Reports / Findings / Audit
+```
+
+## Application Modules
+
+| Route | Module | Purpose |
+|---|---|---|
+| `/dashboard` | Supervisory Overview | Assessment metrics and priority findings |
+| `/entities` | Entity Directory | Entity-level overview |
+| `/entities/cse-alpha` | Entity Assessment | Detailed operational analysis |
+| `/findings/F-1024` | Finding Details | Evidence and reasoning |
+| `/negative-space` | Negative Space Radar | Missing activity analysis |
+| `/peer-benchmark` | Peer Benchmark | Comparative analysis |
+| `/review-planner` | Examiner Review Planner | Review queue and sampling |
+| `/evidence` | Evidence Repository | Source-record inspection |
+| `/audit` | Supervisory Audit Timeline | Processing and review traceability |
+
+## Technology Stack
+
+### Frontend
+
+- Next.js
+- TypeScript
+- Tailwind CSS
+- Lucide Icons
+- Framer Motion
+- Recharts
+
+### Backend
+
+- Python
+- FastAPI
+- Uvicorn
+- Pydantic
+
+### Data & Analytics
+
+- Polars
+- Pandas
+- NumPy
+- scikit-learn
+- statsmodels
+- ruptures
+
+### Storage
+
+- SQLite
+- Parquet
+- DuckDB
+
+### Security & Integrity
+
+- SHA-256
+- Merkle Trees
+- Local evidence integrity ledger
+- Audit logging
+
+### Deployment
+
+- Docker
+- Docker Compose
+- Local / Offline / Air-Gapped deployment
+
+## Project Structure
+
+```text
+SAT-SA/
+├── app/
+│   ├── dashboard/
+│   ├── entities/
+│   ├── findings/
+│   ├── negative-space/
+│   ├── peer-benchmark/
+│   ├── review-planner/
+│   ├── evidence/
+│   └── audit/
+├── components/
+├── backend/
+│   ├── app/
+│   │   ├── main.py
+│   │   ├── analytics/
+│   │   ├── ingestion/
+│   │   ├── evidence/
+│   │   ├── models/
+│   │   └── services/
+│   └── requirements.txt
+├── data/
+│   └── synthetic/
+├── public/
+├── package.json
+├── docker-compose.yml
+└── README.md
+```
+
+# Setup
+
+## Prerequisites
+
+- Git
+- Node.js 18+ or 20+
+- npm
+- Python 3.9+
+- pip
+- Docker Desktop (optional)
+
+Verify:
+
+```bash
+node --version
+npm --version
+python3 --version
+pip --version
+git --version
+```
+
+## 1. Clone Repository
+
+```bash
+git clone https://github.com/priyanshshrivastav23-source/SAT-SA.git
+cd SAT-SA
+```
+
+## 2. Frontend Setup
+
+```bash
+npm install
+npm run dev
+```
+
+Default:
+
+```text
+http://localhost:3000
+```
+
+If port 3000 is occupied:
+
+```bash
+npm run dev -- -p 3002
+```
+
+Then open:
+
+```text
+http://localhost:3002
+```
+
+## 3. Backend Setup
+
+Open another terminal:
+
+```bash
+cd backend
+```
+
+### macOS / Linux
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### Windows
+
+```powershell
+python -m venv venv
+venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Start FastAPI:
+
+```bash
+uvicorn app.main:app --reload --port 8000
+```
+
+Backend:
+
+```text
+http://localhost:8000
+```
+
+Swagger:
+
+```text
+http://localhost:8000/docs
+```
+
+ReDoc:
+
+```text
+http://localhost:8000/redoc
+```
+
+## 4. Run Complete Application
+
+Terminal 1:
+
+```bash
+cd SAT-SA
+npm run dev
+```
+
+Terminal 2:
+
+```bash
+cd SAT-SA/backend
+source venv/bin/activate
+uvicorn app.main:app --reload --port 8000
+```
+
+Open the frontend at `http://localhost:3000` or `http://localhost:3002`.
+
+## 5. Environment Variables
+
+Frontend `.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+Backend `.env` if required:
+
+```env
+APP_ENV=development
+DATABASE_URL=sqlite:///./sat_sa.db
+```
+
+Never commit credentials, encryption keys, private information, or real SOC datasets.
+
+## 6. Testing
+
+Backend:
+
+```bash
+cd backend
+pytest
+```
+
+Frontend lint:
+
+```bash
+npm run lint
+```
+
+Production build:
+
+```bash
+npm run build
+```
+
+## 7. Docker
+
+If `docker-compose.yml` is present:
+
+```bash
+docker compose up --build
+```
+
+Stop:
+
+```bash
+docker compose down
+```
+
+## 8. Production
+
+Frontend:
+
+```bash
+npm run build
+npm start
+```
+
+Backend:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Do not use `--reload` in production.
+
+## 9. Troubleshooting
+
+### Port 3000 occupied
+
+```bash
+npm run dev -- -p 3002
+```
+
+### Backend dependency problems
+
+Activate the virtual environment and reinstall:
+
+```bash
+source backend/venv/bin/activate
+pip install -r backend/requirements.txt
+```
+
+### Frontend dependency problems
+
+```bash
+rm -rf node_modules
+npm install
+```
+
+### Backend unavailable
+
+Check:
+
+```text
+http://localhost:8000/docs
+```
+
+### Frontend cannot reach backend
+
+Check:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+Restart the frontend after changing environment variables.
+
+## Offline / Air-Gapped Operation
+
+The core SAT-SA workflow is designed to run locally without mandatory:
+
+- Internet connectivity
+- Cloud databases
+- External AI APIs
+- Firebase
+- Supabase
+- OpenAI API
+
+The frontend, backend, analytics and storage can operate within the controlled deployment environment.
+
+## Demo Mode
+
+If implemented in the current build, DEMO MODE can use local synthetic data when the backend is unavailable.
+
+Example synthetic output:
+
+```text
+5 CSE entities
+125,430 records
+94% data confidence
+37 findings
+8 high-priority findings
+```
+
+These values are for demonstration only.
+
+## Evidence Integrity
+
+SAT-SA can maintain a local integrity ledger:
+
+```text
+Source Record
+     ↓
+SHA-256
+     ↓
+Batch
+     ↓
+Merkle Tree
+     ↓
+Merkle Root
+```
+
+This supports technical detection of changes to referenced evidence after the integrity record is created.
+
+Cryptographic integrity verification should not be described as independently guaranteeing legal admissibility; applicable legal and organizational requirements must be evaluated separately.
+
+## Responsible Use
+
+- Analytical signals are not verdicts.
+- Missing records are not automatically proof of missing activity.
+- Peer differences require operational context.
+- Similar investigation notes may have legitimate explanations.
+- KPI mismatches require human investigation.
+- Final assessment remains with the authorized examiner.
+- Synthetic demo data must be kept separate from real assessment data.
+
+## Future Enhancements
+
+- Additional SOC data connectors
+- Advanced temporal analytics
+- Explainable anomaly detection
+- Improved peer-group construction
+- NLP-based investigation-note analysis
+- Semantic similarity
+- MinHash-based template detection
+- Advanced sampling
+- Configurable supervisory rules
+- Versioned analytical models
+- Expanded governance and audit controls
+
+Advanced AI/ML components should be introduced only after validation on representative datasets.
+
+## Project Information
+
+| Field | Details |
+|---|---|
+| Project | SAT-SA |
+| Full Name | Supervisory Analytics Tool for SOC Assessment |
+| Event | Smart India Hackathon 2026 |
+| Problem Statement | SIH26157 |
+| Problem Setter Context | NTRO / NCIIPC |
+| Domain | Cybersecurity / SOC Assessment |
+| Technology Bucket | Big Data Analysis |
+| Deployment | Offline / Local / Air-Gapped |
+| Core Concept | Claim-vs-Reality Engine |
+| Decision Model | Human-in-the-Loop |
+
+## Team — Final Commit
+
+- **Yash Barfa** — https://github.com/YashBarfa0603
+- **Priyansh Shrivastav** — https://github.com/priyanshshrivastav23-source
+
+## Final Thought
+
+> **Don't just ask what the SOC reports. Examine whether the available evidence supports the report.**
+
+SAT-SA combines data-quality checks, execution-gap analysis, negative-space analysis, peer comparison, KPI/evidence examination, explainable evidence fusion, review prioritization, evidence integrity, and human examiner review to support a more structured and evidence-driven SOC assessment process.
